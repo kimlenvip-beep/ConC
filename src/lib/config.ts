@@ -1,4 +1,4 @@
-import type { ShopConfig, ItemConfig, PricingConfig } from '../types';
+import type { ShopConfig, ItemConfig } from '../types';
 
 /**
  * app configuration and shared constants
@@ -12,7 +12,6 @@ export const SQM_TO_SQYD = 1.196;
 
 /**
  * SHOP_CONFIG - used by document generator and other modules
- * If you have a ShopConfig type in ../types you can update the object shape accordingly.
  */
 export const SHOP_CONFIG = {
     name: "Marnthara",
@@ -39,9 +38,7 @@ export const PRICING = {
     ]
 } as const;
 
-/**
- * WALLPAPER_SPECS - wallpaper roll sizes / allowances
- */
+/* wallpaper specs and other constants */
 export const WALLPAPER_SPECS = {
     roll_width_m: 0.53,
     roll_length_m: 10.0,
@@ -49,9 +46,6 @@ export const WALLPAPER_SPECS = {
     waste_allowance: 1.15
 } as const;
 
-/**
- * ITEM_CONFIG - metadata used by UI & rendering
- */
 export const ITEM_CONFIG = {
     set: { name: 'ชุด', className: 'set-item', icon: 'ph-stack' },
     area: { name: 'พื้นที่', className: 'area-item', icon: 'ph-ruler' },
@@ -61,9 +55,6 @@ export const ITEM_CONFIG = {
     default: { name: 'ของตกแต่ง', className: 'default-item', icon: 'ph-ruler' }
 } as const;
 
-/**
- * SELECTORS - central CSS selectors used by UI helpers
- */
 export const SELECTORS = {
     appContainer: '#app-container',
     roomsContainer: '#roomsContainer',
@@ -95,7 +86,7 @@ export const SELECTORS = {
     duplicateRoomBtn: '#duplicateRoomBtn'
 } as const;
 
-/* Freeze objects to signal immutability at runtime */
+/* Freeze runtime objects */
 Object.freeze(SHOP_CONFIG);
 Object.freeze(PRICING);
 Object.freeze(WALLPAPER_SPECS);

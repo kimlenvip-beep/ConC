@@ -11,6 +11,16 @@ export const toNum = (v: any): number => {
 
 export const fmt = (v: any): string => toNum(v).toFixed(2);
 
+/**
+ * fmtDimension
+ * - Format dimension value (meters, cm converted) for display.
+ * - Returns empty string for non-positive values.
+ */
+export const fmtDimension = (v: any): string => {
+    const num = toNum(v);
+    return num > 0 ? num.toFixed(2) : '';
+};
+
 export const fmtTH = (v: any): string => {
     const num = toNum(v);
     try {
@@ -90,53 +100,4 @@ export const bahttext = (v: any): string => {
     }
     if (d > 0) res += read(d) + 'สตางค์'; else res += 'ถ้วน';
     return res;
-};
-
-/**
- * Convert centimeters input to meters on blur; writes to target input if provided.
- */
-export const handleCmToMBlur = (
-    source: Event | HTMLInputElement,
-    target?: HTMLInputElement | string
-): void => {
-    let inputEl: HTMLInputElement | null = null;
-    if (source instanceof Event) {
-        const t = source.target as HTMLElement | null;
-        if (!t) return;
-        if ((t as HTMLInputElement).value !== undefined) inputEl = t as HTMLInputElement;
-        else return;
-    } else if (source instanceof HTMLInputElement) inputEl = source;
-    else return;
-
-    const cm = toNum(inputEl.value);
-    if (cm <= 0) {
-        if (target) {
-            if (typeof target === 'string') {
-                const el = document.querySelector<HTMLInputElement>(target);
-                if (el) el.value = '';
-            } else target.value = '';
-        } else {
-            const sib = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters');
-            if (sib) sib.value = '';
-        }
-        return;
-    }
-    const m = (cm / 100).toFixed(2);
-    if (target) {
-        if (typeof target === 'string') {
-            const el = document.querySelector<HTMLInputElement>(target);
-            if (el) el.value = m;
-        } else target.value = m;
-    } else {
-        const dataTarget = inputEl.getAttribute('data-target');
-        if (dataTarget) {
-            const el = document.querySelector<HTMLInputElement>(dataTarget);
-            if (el) el.value = m;
-            return;
-        }
-        const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters') || inputEl.nextElementSibling as (HTMLInputElement | null);
-        if (sibling && sibling.tagName.toLowerCase() === 'input') {
-            sibling.value = m;
-        }
-    }
 };
