@@ -1,45 +1,47 @@
 // src/lib/ui-state.ts
-// [ไฟล์ใหม่] - เก็บ State ส่วนกลางเพื่อทลายวงจร
+// Centralized state management with proper type safety
 
-import type { FavoriteItem } from '../types';
+interface UIState {
+    isLocked: boolean;
+    activeFavoriteInput: string | null;
+    favManagerChangesMade: boolean;
+    selectedFavItem: string | null;
+}
 
-// --- State Variables (ย้ายมาจาก ui.ts และที่อื่นๆ) ---
+const state: UIState = {
+    isLocked: false,
+    activeFavoriteInput: null,
+    favManagerChangesMade: false,
+    selectedFavItem: null
+};
 
-// (จาก ui.ts) สถานะที่แชร์กัน
-let currentActiveFavoriteInput: { input: HTMLInputElement; type: string } | null = null;
-let currentActiveHardwareItem: HTMLElement | null = null;
-let currentSelectedFavItem: { el: HTMLElement; code: string; price: number } | null = null;
-let favManagerChangesMade = false;
-let currentRoomDefaultsEl: HTMLElement | null = null;
-let roomDefaultsModalListeners: { [key: string]: (e: Event) => void } = {};
-let appIsLocked = false; // สถานะ Lock ของแอป
+// Getters
+export const getIsLocked = (): boolean => state.isLocked;
+export const getActiveFavoriteInput = (): string | null => state.activeFavoriteInput;
+export const getFavManagerChangesMade = (): boolean => state.favManagerChangesMade;
+export const getSelectedFavItem = (): string | null => state.selectedFavItem;
 
-// --- Getters/Setters ---
+// Setters with validation
+export const setIsLocked = (value: boolean): void => {
+    state.isLocked = Boolean(value);
+};
 
-// สำหรับ Favorites
-export const getActiveFavoriteInput = () => currentActiveFavoriteInput;
-export const setActiveFavoriteInput = (val: { input: HTMLInputElement; type: string } | null) => { currentActiveFavoriteInput = val; };
-export const getSelectedFavItem = () => currentSelectedFavItem;
-export const setSelectedFavItem = (val: { el: HTMLElement; code: string; price: number } | null) => { currentSelectedFavItem = val; };
-export const getFavManagerChangesMade = () => favManagerChangesMade;
-export const setFavManagerChangesMade = (val: boolean) => { favManagerChangesMade = val; };
+export const setActiveFavoriteInput = (value: string | null): void => {
+    state.activeFavoriteInput = value;
+};
 
-// สำหรับ Modals (Hardware, Room Defaults)
-export const getActiveHardwareItem = () => currentActiveHardwareItem;
-export const setActiveHardwareItem = (val: HTMLElement | null) => { currentActiveHardwareItem = val; };
-export const getCurrentRoomDefaultsEl = () => currentRoomDefaultsEl;
-export const setCurrentRoomDefaultsEl = (val: HTMLElement | null) => { currentRoomDefaultsEl = val; };
-export const getRoomDefaultsModalListeners = () => roomDefaultsModalListeners;
-export const clearRoomDefaultsModalListeners = () => { roomDefaultsModalListeners = {}; };
-export const addRoomDefaultsModalListener = (key: string, fn: (e: Event) => void) => { roomDefaultsModalListeners[key] = fn; };
+export const setFavManagerChangesMade = (value: boolean): void => {
+    state.favManagerChangesMade = Boolean(value);
+};
 
-// สำหรับสถานะ Lock (ที่แก้ Error)
-export const getIsLocked = () => appIsLocked;
-export const setIsLocked = (val: boolean) => { 
-    appIsLocked = val; 
-    // อัปเดต UI ทันที
-    const container = document.querySelector<HTMLElement>('#appContainer');
-    if (container) {
-        container.classList.toggle('is-locked', val);
-    }
+export const setSelectedFavItem = (value: string | null): void => {
+    state.selectedFavItem = value;
+};
+
+// Reset state
+export const resetState = (): void => {
+    state.isLocked = false;
+    state.activeFavoriteInput = null;
+    state.favManagerChangesMade = false;
+    state.selectedFavItem = null;
 };
