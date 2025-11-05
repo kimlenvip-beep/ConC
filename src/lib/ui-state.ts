@@ -6,13 +6,15 @@ interface UIState {
     activeFavoriteInput: string | null;
     favManagerChangesMade: boolean;
     selectedFavItem: string | null;
+    activeHardwareItem: string | null; // new: currently-active hardware item id/code
 }
 
 const state: UIState = {
     isLocked: false,
     activeFavoriteInput: null,
     favManagerChangesMade: false,
-    selectedFavItem: null
+    selectedFavItem: null,
+    activeHardwareItem: null
 };
 
 // Getters
@@ -20,6 +22,7 @@ export const getIsLocked = (): boolean => state.isLocked;
 export const getActiveFavoriteInput = (): string | null => state.activeFavoriteInput;
 export const getFavManagerChangesMade = (): boolean => state.favManagerChangesMade;
 export const getSelectedFavItem = (): string | null => state.selectedFavItem;
+export const getActiveHardwareItem = (): string | null => state.activeHardwareItem; // <- added
 
 // Setters
 export const setIsLocked = (value: boolean): void => {
@@ -38,12 +41,17 @@ export const setSelectedFavItem = (value: string | null): void => {
     state.selectedFavItem = value;
 };
 
+export const setActiveHardwareItem = (value: string | null): void => {
+    state.activeHardwareItem = value;
+};
+
 // Reset helper
 export const resetState = (): void => {
     state.isLocked = false;
     state.activeFavoriteInput = null;
     state.favManagerChangesMade = false;
     state.selectedFavItem = null;
+    state.activeHardwareItem = null;
 };
 
 /**
