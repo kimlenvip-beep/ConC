@@ -1,0 +1,110 @@
+/* src/styles/item-types.css */
+/* (ไฟล์เดิมจาก-styles_01.zip) */
+@import url('./themes.css'); /* Import themes for variables */
+
+/* --- ITEM TYPE SPECIFIC STYLES --- */
+
+/* Set Item */
+.set-item { border-left-color: var(--curtain-color); border-top-color: var(--curtain-color); }
+.set-item .item-title, .set-item .item-type-display { color: var(--curtain-color); }
+.set-item .item-header { background-color: var(--curtain-container-color); border-bottom: 1px solid var(--outline); }
+.set-item .item-type-changer { color: var(--curtain-color); border-color: var(--curtain-color); }
+.set-item .item-type-changer:hover { background-color: var(--curtain-container-color); }
+
+/* Wallpaper Item */
+.wallpaper-item { border-left-color: var(--wallpaper-color); border-top-color: var(--wallpaper-color); }
+.wallpaper-item .item-title, .wallpaper-item .item-type-display { color: var(--wallpaper-color); }
+.wallpaper-item .item-header { background-color: var(--wallpaper-container-color); border-bottom: 1px solid var(--outline); }
+.wallpaper-item .item-type-changer { color: var(--wallpaper-color); border-color: var(--wallpaper-color); }
+.wallpaper-item .item-type-changer:hover { background-color: var(--wallpaper-container-color); }
+
+/* Wallpaper Specific Grid */
+.walls-section {
+    grid-column: 1 / -1; /* Span full width in item-grid */
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--outline-variant);
+}
+.walls-section > p {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+	color: var(--on-surface-variant);
+}
+.walls-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.wall-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.wall-input-row .form-group {
+	flex-grow: 1;
+}
+.wall-input-row label {
+	font-size: 0.8rem;
+	margin-bottom: 0;
+	gap: 0.2rem;
+}
+.wall-input-row input {
+	padding: 0.6rem 0.75rem;
+	font-size: 0.95rem;
+	min-height: 40px;
+}
+.wall-input-row .btn-icon-small {
+	min-width: 40px;
+	min-height: 40px;
+	margin-top: auto; /* Align to bottom */
+}
+
+
+/* Wooden Blind Item */
+.wooden-blind-item { border-left-color: var(--wooden-blind-color); border-top-color: var(--wooden-blind-color); }
+.wooden-blind-item .item-title, .wooden-blind-item .item-type-display { color: var(--wooden-blind-color); }
+.wooden-blind-item .item-header { background-color: var(--wooden-blind-container-color); border-bottom: 1px solid var(--outline); }
+.wooden-blind-item .item-type-changer { color: var(--wooden-blind-color); border-color: var(--wooden-blind-color); }
+.wooden-blind-item .item-type-changer:hover { background-color: var(--wooden-blind-container-color); }
+
+/* Roller Blind Item */
+.roller-blind-item { border-left-color: var(--roller-blind-color); border-top-color: var(--roller-blind-color); }
+.roller-blind-item .item-title, .roller-blind-item .item-type-display { color: var(--roller-blind-color); }
+.roller-blind-item .item-header { background-color: var(--roller-blind-container-color); border-bottom: 1px solid var(--outline); }
+.roller-blind-item .item-type-changer { color: var(--roller-blind-color); border-color: var(--roller-blind-color); }
+.roller-blind-item .item-type-changer:hover { background-color: var(--roller-blind-container-color); }
+
+/* Vertical Blind Item */
+.vertical-blind-item { border-left-color: var(--vertical-blind-color); border-top-color: var(--vertical-blind-color); }
+.vertical-blind-item .item-title, .vertical-blind-item .item-type-display { color: var(--vertical-blind-color); }
+.vertical-blind-item .item-header { background-color: var(--vertical-blind-container-color); border-bottom: 1px solid var(--outline); }
+.vertical-blind-item .item-type-changer { color: var(--vertical-blind-color); border-color: var(--vertical-blind-color); }
+.vertical-blind-item .item-type-changer:hover { background-color: var(--vertical-blind-container-color); }
+
+/* Partition Item */
+.partition-item { border-left-color: var(--partition-color); border-top-color: var(--partition-color); }
+.partition-item .item-title, .partition-item .item-type-display { color: var(--partition-color); }
+.partition-item .item-header { background-color: var(--partition-container-color); border-bottom: 1px solid var(--outline); }
+.partition-item .item-type-changer { color: var(--partition-color); border-color: var(--partition-color); }
+.partition-item .item-type-changer:hover { background-color: var(--partition-container-color); }
+
+/* Pleated Screen Item */
+.pleated-screen-item { border-left-color: var(--pleated-screen-color); border-top-color: var(--pleated-screen-color); }
+.pleated-screen-item .item-title, .pleated-screen-item .item-type-display { color: var(--pleated-screen-color); }
+.pleated-screen-item .item-header { background-color: var(--pleated-screen-container-color); border-bottom: 1px solid var(--outline); }
+.pleated-screen-item .item-type-changer { color: var(--pleated-screen-color); border-color: var(--pleated-screen-color); }
+.pleated-screen-item .item-type-changer:hover { background-color: var(--pleated-screen-container-color); }
+
+/* Aluminum Blind Item */
+.aluminum-blind-item { border-left-color: var(--aluminum-blind-color); border-top-color: var(--aluminum-blind-color); }
+.aluminum-blind-item .item-title, .aluminum-blind-item .item-type-display { color: var(--aluminum-blind-color); }
+.aluminum-blind-item .item-header { background-color: var(--aluminum-blind-container-color); border-bottom: 1px solid var(--outline); }
+.aluminum-blind-item .item-type-changer { color: var(--aluminum-blind-color); border-color: var(--aluminum-blind-color); }
+.aluminum-blind-item .item-type-changer:hover { background-color: var(--aluminum-blind-container-color); }
+
+/* Default Item */
+.default-item { border-left-color: var(--default-color); border-top-color: var(--default-color); }
+.default-item .item-title, .default-item .item-type-display { color: var(--default-color); }
+.default-item .item-header { background-color: var(--default-container-color); border-bottom: 1px solid var(--outline); }
+.default-item .item-type-changer { color: var(--default-color); border-color: var(--default-color); }
+.default-item .item-type-changer:hover { background-color: var(--default-container-color); }

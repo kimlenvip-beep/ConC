@@ -1,0 +1,48 @@
+/* src/styles/buttons.css */
+@import url('./themes.css');
+
+/* --- BUTTONS --- */
+/* (ตามข้อ 10) HIG Minimalist Design & (ข้อ 17) WCAG Contrast */
+.btn {
+	/* ... (โค้ด-btn-เดิม) ... */
+	min-height: 44px; /* Minimum touch target */
+}
+
+/* (ตามข้อ 11) Icon + Text */
+.btn .btn-text {
+    /* บนจอเล็กมาก-อาจจะซ่อนข้อความ */
+    display: none;
+}
+/* แสดงข้อความเมื่อกว้างพอ */
+@media (min-width: 400px) {
+    .btn .btn-text {
+        display: inline;
+    }
+}
+/* ปุ่มที่ต้องการให้แสดงข้อความเสมอ */
+.btn-full-width .btn-text,
+.btn-secondary .btn-text,
+.footer-totals .btn-text {
+    display: inline;
+}
+
+/* Primary Button (Filled) */
+.btn-primary {
+	background-color: var(--primary);
+	color: var(--on-primary);
+	border-color: var(--primary);
+}
+/* ... (hover/disabled-states) ... */
+
+/* Secondary Button (Outlined/Tonal) */
+.btn-secondary {
+	background-color: var(--surface-container-high);
+	color: var(--on-surface);
+	border-color: var(--outline);
+}
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--surface-container-low);
+    border-color: var(--primary);
+}
+
+/* ... (โค้ดที่เหลือสำหรับ-buttons.css) ... */

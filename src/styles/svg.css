@@ -1,0 +1,105 @@
+/* src/styles/svg.css */
+/* (ไฟล์เดิมจาก-styles_02.zip) */
+@import url('./themes.css'); /* Import themes for variables */
+
+/* --- SVG STYLES (Look Book / Visualizations) --- */
+
+/* General SVG Elements */
+.visual-placeholder svg {
+    display: block; /* Remove extra space below SVG */
+    width: 100%;
+    height: 100%;
+}
+
+/* Dimension Lines */
+.dimension-line, .dimension-tick {
+    stroke: var(--on-surface-variant);
+    stroke-width: 0.75;
+}
+.dimension-line {
+    stroke-dasharray: 2 2; /* Dashed line */
+}
+.dimension-text {
+    font-size: 8px;
+    fill: var(--on-surface);
+    text-anchor: middle;
+    font-family: sans-serif; /* Use a generic sans-serif for SVG text */
+}
+
+/* Fallback Text */
+.fallback-text {
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--on-surface-variant);
+    text-anchor: middle;
+    dominant-baseline: middle; /* Center vertically */
+    font-family: sans-serif;
+}
+
+/* Opening Indicator */
+.opening-text {
+    text-anchor: middle;
+    font-size: 10px;
+    font-weight: bold;
+    fill: var(--on-surface);
+}
+
+/* SVG Object Fills */
+.visual-bg {
+    fill: var(--surface-container-low);
+}
+.visual-frame {
+    fill: none;
+    stroke: var(--outline-variant);
+    stroke-width: 1;
+}
+.item-visual-fill {
+    fill: var(--surface-container-high);
+    stroke: var(--on-surface-variant);
+    stroke-width: 0.5;
+}
+
+/* Wallpaper */
+.wallpaper-pattern {
+    fill: var(--wallpaper-color);
+    opacity: 0.5;
+}
+
+/* Curtains */
+.curtain-panel-opaque {
+    fill: var(--surface-container-high);
+    stroke: var(--on-surface-variant);
+    stroke-width: 0.5;
+}
+.curtain-panel-sheer {
+    fill: var(--surface);
+    stroke: var(--outline-variant);
+    stroke-width: 0.5;
+    opacity: 0.7;
+}
+
+/* Curtain Styles */
+.style-grommet { /* Eyelet */
+    fill: var(--outline-variant);
+    stroke: var(--on-surface-variant);
+    stroke-width: 0.75;
+}
+.style-ripplefold-path { /* S-Fold / Wave */
+    fill: none;
+    stroke: var(--on-surface-variant);
+    stroke-width: 1.5;
+}
+.style-pleat-text { /* Pleat text indicator */
+    font-size: 4px;
+    fill: var(--on-surface-variant);
+    font-family: monospace;
+}
+.style-pleat-line { /* Generic vertical line for pleats/rod pocket */
+    stroke: var(--on-surface-variant);
+    stroke-width: 0.6;
+    opacity: 0.8;
+}
+.style-pleat-stitch { /* Small dot for Roman/Fold stitch */
+    fill: var(--on-surface-variant);
+    opacity: 0.6;
+}

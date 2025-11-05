@@ -1,0 +1,204 @@
+/* src/styles/themes.css */
+/* [RENOVATION] ปรับปรุง UI ให้ทันสมัย (Modern & Clean) */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap');
+
+:root {
+	--font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	--border-radius-sm: 8px;
+	--border-radius-md: 12px;
+	--border-radius-lg: 16px;
+	--border-radius-xl: 28px;
+	--transition-speed: 0.2s;
+
+	/* (QoL) ใช้-Glassmorphism-สำหรับ-Header/Footer */
+	--glass-bg: rgba(255, 255, 255, 0.7);
+	--glass-border: rgba(0, 0, 0, 0.1);
+	--shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* --- 🌞 Light Theme (Default) --- */
+[data-theme="light"],
+:root {
+	/* Main Palette */
+	--primary: #005B96; /* สีน้ำเงินเข้ม (Marnthara Blue) */
+	--on-primary: #FFFFFF;
+	--primary-container: #D0E4FF;
+	--on-primary-container: #001C31;
+
+	/* Secondary Palette */
+	--secondary: #535F70;
+	--on-secondary: #FFFFFF;
+	--secondary-container: #D9E3F8;
+	--on-secondary-container: #101C2B;
+
+	/* Status Colors */
+	--danger: #BA1A1A;
+	--on-danger: #FFFFFF;
+	--danger-container: #FFDAD6;
+	--on-danger-container: #410002;
+	--warning: #8C5300;
+	--on-warning: #FFFFFF;
+	--warning-container: #FFDDBA;
+	--on-warning-container: #2D1700;
+	--success: #006D30;
+	--on-success: #FFFFFF;
+	--success-container: #93F992;
+	--on-success-container: #00210A;
+	--info: #00639C;
+	--on-info: #FFFFFF;
+	--info-container: #C8E6FF;
+	--on-info-container: #001D33;
+
+	/* Surface & Background */
+	--background: #F8F9FA; /* สีพื้นหลังเทาอ่อนมาก */
+	--surface: #FFFFFF; /* สีการ์ด (สีขาว) */
+	--surface-container: #F1F3F5; /* สีพื้นหลังที่เข้มขึ้นเล็กน้อย (เช่น Customer Card) */
+	--surface-container-high: #E9ECEF;
+	--on-surface: #1A1C1E; /* สีตัวอักษรหลัก */
+	--on-surface-variant: #43474E; /* สีตัวอักษรรอง */
+
+	/* Outlines & Shadows */
+	--outline: #CED4DA; /* สีเส้นขอบ (อ่อน) */
+	--outline-variant: #ADB5BD; /* สีเส้นขอบ (เข้ม) */
+	--shadow-color: rgba(0, 0, 0, 0.08);
+
+	/* Glassmorphism */
+	--glass-bg: rgba(255, 255, 255, 0.7);
+	--glass-border: rgba(0, 0, 0, 0.1);
+}
+
+/* --- 🌚 Dark Theme --- */
+[data-theme="dark"] {
+	/* Main Palette */
+	--primary: #9BCAFF;
+	--on-primary: #003051;
+	--primary-container: #004674;
+	--on-primary-container: #D0E4FF;
+
+	/* Secondary Palette */
+	--secondary: #BDC7D9;
+	--on-secondary: #253141;
+	--secondary-container: #3C4758;
+	--on-secondary-container: #D9E3F8;
+
+	/* Status Colors */
+	--danger: #FFB4AB;
+	--on-danger: #690005;
+	--danger-container: #93000A;
+	--on-danger-container: #FFDAD6;
+	--warning: #FFB868;
+	--on-warning: #4B2A00;
+	--warning-container: #6A3E00;
+	--on-warning-container: #FFDDBA;
+	--success: #77DC79;
+	--on-success: #003909;
+	--success-container: #005312;
+	--on-success-container: #93F992;
+	--info: #8BCEFF;
+	--on-info: #003353;
+	--info-container: #004B76;
+	--on-info-container: #C8E6FF;
+
+	/* Surface & Background */
+	--background: #121212; /* สีพื้นหลัง (ดำสนิท) */
+	--surface: #1E1E1E; /* สีการ์ด (เทาเข้ม) */
+	--surface-container: #2A2A2A; /* สีพื้นหลังที่สว่างขึ้นเล็กน้อย */
+	--surface-container-high: #333333;
+	--on-surface: #E3E3E3; /* สีตัวอักษรหลัก */
+	--on-surface-variant: #A8B0B9; /* สีตัวอักษรรอง */
+
+	/* Outlines & Shadows */
+	--outline: #495057; /* สีเส้นขอบ (อ่อน) */
+	--outline-variant: #6C757D; /* สีเส้นขอบ (เข้ม) */
+	--shadow-color: rgba(0, 0, 0, 0.25);
+
+	/* Glassmorphism */
+	--glass-bg: rgba(30, 30, 30, 0.7);
+	--glass-border: rgba(255, 255, 255, 0.15);
+}
+
+/* --- (QoL) System Theme Preference --- */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		/* ใช้ค่า-Dark-Mode-อัตโนมัติ */
+		--primary: #9BCAFF;
+		--on-primary: #003051;
+		--primary-container: #004674;
+		--on-primary-container: #D0E4FF;
+		--secondary: #BDC7D9;
+		--on-secondary: #253141;
+		--secondary-container: #3C4758;
+		--on-secondary-container: #D9E3F8;
+		--danger: #FFB4AB;
+		--on-danger: #690005;
+		--danger-container: #93000A;
+		--on-danger-container: #FFDAD6;
+		--warning: #FFB868;
+		--on-warning: #4B2A00;
+		--warning-container: #6A3E00;
+		--on-warning-container: #FFDDBA;
+		--success: #77DC79;
+		--on-success: #003909;
+		--success-container: #005312;
+		--on-success-container: #93F992;
+		--info: #8BCEFF;
+		--on-info: #003353;
+		--info-container: #004B76;
+		--on-info-container: #C8E6FF;
+		--background: #121212;
+		--surface: #1E1E1E;
+		--surface-container: #2A2A2A;
+		--surface-container-high: #333333;
+		--on-surface: #E3E3E3;
+		--on-surface-variant: #A8B0B9;
+		--outline: #495057;
+		--outline-variant: #6C757D;
+		--shadow-color: rgba(0, 0, 0, 0.25);
+		--glass-bg: rgba(30, 30, 30, 0.7);
+		--glass-border: rgba(255, 255, 255, 0.15);
+	}
+}
+
+/* --- Item Type Colors (Consistent) --- */
+:root {
+	--curtain-color: #005B96;
+	--curtain-container-color: #D0E4FF;
+	--wallpaper-color: #4B6584;
+	--wallpaper-container-color: #D3D9E2;
+	--wooden-blind-color: #8C5300;
+	--wooden-blind-container-color: #FFDDBA;
+	--roller-blind-color: #5A5D72;
+	--roller-blind-container-color: #E0E2F8;
+	--vertical-blind-color: #006A60;
+	--vertical-blind-container-color: #77F8E3;
+	--partition-color: #6B5770;
+	--partition-container-color: #F4D9F6;
+	--pleated-screen-color: #4A634D;
+	--pleated-screen-container-color: #CCE8CD;
+	--aluminum-blind-color: #606060;
+	--aluminum-blind-container-color: #E1E1E1;
+	--default-color: #535F70;
+	--default-container-color: #D9E3F8;
+}
+
+[data-theme="dark"] {
+	--curtain-color: #9BCAFF;
+	--curtain-container-color: #004674;
+	--wallpaper-color: #B7CDE9;
+	--wallpaper-container-color: #344D6A;
+	--wooden-blind-color: #FFB868;
+	--wooden-blind-container-color: #6A3E00;
+	--roller-blind-color: #BDC7D9;
+	--roller-blind-container-color: #3C4758;
+	--vertical-blind-color: #57DBCA;
+	--vertical-blind-container-color: #005148;
+	--partition-color: #D7BEDD;
+	--partition-container-color: #524057;
+	--pleated-screen-color: #B0CCB1;
+	--pleated-screen-container-color: #334B36;
+	--aluminum-blind-color: #C5C5C5;
+	--aluminum-blind-container-color: #484848;
+	--default-color: #BDC7D9;
+	--default-container-color: #3C4758;
+}

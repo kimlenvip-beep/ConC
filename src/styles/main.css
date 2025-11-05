@@ -1,0 +1,24 @@
+/* src/styles/main.css - Vite Importer */
+
+/* 1. Variables and Themes (Must be first) */
+@import url('./themes.css');
+
+/* 2. Base styles, resets, and core layout */
+@import url('./base.css');
+
+/* 3. Components */
+@import url('./buttons.css');
+@import url('./cards.css');
+@import url('./forms.css');
+@import url('./menus.css');
+@import url('./modals.css');
+@import url('./item-types.css'); /* Includes specific item layouts like walls */
+
+/* 4. Utilities */
+@import url('./utilities.css');
+
+/* 5. Specific Visualizations */
+@import url('./svg.css');
+
+/* 6. Print Styles (Load last) */
+@import url('./print.css');

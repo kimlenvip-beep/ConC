@@ -1,0 +1,59 @@
+/* src/styles/cards.css */
+@import url('./themes.css'); /* Import themes for variables */
+
+/* --- COMPONENTS --- */
+/* Cards */
+.card {
+	background-color: var(--surface);
+	border-radius: var(--border-radius-lg);
+	border: 1px solid var(--outline);
+	margin-bottom: 1.5rem;
+	box-shadow: var(--shadow-md);
+	overflow: visible; /* Allows dropdowns to show */
+	transition: all var(--transition-speed) ease-in-out;
+	position: relative; /* For absolute positioning inside */
+	scroll-margin-top: 80px; /* Offset for sticky header */
+}
+
+/* (ตามข้อ 9) Visual Grouping */
+.customer-card {
+    background-color: var(--surface-container-low); /* สีพื้นหลังที่ต่างออกไป */
+    border-color: var(--outline-variant);
+}
+
+@media (hover: hover) {
+	.card:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--shadow-lg);
+		border-color: var(--primary);
+	}
+    /* (Item 9) Visual Grouping Hover */
+    .customer-card:hover {
+        border-color: var(--primary);
+    }
+}
+
+.card summary {
+	list-style: none; /* Remove default marker */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 0.5rem 0.75rem 1.25rem; /* More padding left */
+	cursor: pointer;
+	background-color: transparent;
+	gap: 0.5rem;
+}
+
+/* ... (โค้ด-summary-ที่เหลือ) ... */
+
+/* (ตามข้อ 8) Visual Hierarchy: Total-ใน-Room-Card */
+.room-summary-total {
+    font-size: 1.1rem;
+    font-weight: 700; /* ทำให้เด่นชัด */
+    color: var(--primary);
+    background-color: var(--primary-container);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-md);
+    margin-right: 0.5rem;
+}
+/* ... (โค้ดที่เหลือสำหรับ-cards.css) ... */

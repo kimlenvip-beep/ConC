@@ -1,0 +1,387 @@
+/* src/styles/modals.css */
+/* (ไฟล์เดิมจาก-styles_02.zip) */
+@import url('./themes.css'); /* Import themes for variables */
+
+/* --- MODALS --- */
+/* General Modal Styles */
+.modal-wrapper {
+	position: fixed;
+	inset: 0; /* Cover entire viewport */
+	background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 200; /* High z-index */
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity var(--transition-speed), visibility var(--transition-speed);
+}
+
+.modal-wrapper.visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.modal-content {
+	background: var(--surface);
+	border-radius: var(--border-radius-lg);
+	padding: 1.5rem;
+	width: 90%; /* Responsive width */
+	max-width: 300px; /* Default max-width */
+	box-shadow: var(--shadow-lg);
+	border: 1px solid var(--outline);
+	transform: scale(1); /* Start at full scale */
+	opacity: 1;
+	transition: background-color var(--transition-speed), transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
+}
+
+.modal-content h3 {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	color: var(--on-surface);
+	font-size: 1.3rem;
+	text-align: center;
+}
+.modal-content p {
+	margin-bottom: 1.5rem;
+	color: var(--on-surface-variant);
+	text-align: center;
+	font-size: 0.95rem;
+}
+
+.modal-actions {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
+}
+.modal-actions .btn {
+	flex-grow: 1; /* Buttons share space */
+}
+/* Specific modal sizes */
+.modal-content.modal-lg { max-width: 700px; }
+.modal-content.modal-md { max-width: 500px; }
+.modal-content.modal-sm { max-width: 380px; }
+
+/* Option Item (Radio button replacement) */
+.option-item {
+	display: block;
+	padding: 1rem 1.25rem;
+	border: 2px solid var(--outline);
+	border-radius: var(--border-radius-md);
+	margin-bottom: 0.75rem;
+	cursor: pointer;
+	transition: all var(--transition-speed);
+}
+.option-item:hover {
+	background-color: var(--surface-container-high);
+	border-color: var(--primary);
+}
+.option-item.selected {
+	background-color: var(--primary-container);
+	border-color: var(--primary);
+	box-shadow: var(--shadow-sm);
+}
+.option-item input[type="radio"] {
+	display: none; /* Hide real radio */
+}
+.option-item strong {
+	display: block;
+	font-size: 1.1rem;
+	color: var(--on-surface);
+	margin-bottom: 0.1rem;
+}
+.option-item strong i.ph {
+	color: var(--primary);
+	font-size: 1.1em;
+	margin-right: 0.5rem;
+}
+.option-item span {
+	font-size: 0.9rem;
+	color: var(--on-surface-variant);
+	padding-left: 1.8rem; /* Align with icon */
+}
+
+/* Favorites List Modal */
+#favListModalBody, #favManagerModalBody {
+	max-height: 50vh;
+	overflow-y: auto;
+	background-color: var(--surface-container-low);
+	border-radius: var(--border-radius-md);
+	border: 1px solid var(--outline);
+	padding: 0.5rem;
+}
+.fav-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	border-radius: var(--border-radius-sm);
+	cursor: pointer;
+	transition: background-color var(--transition-speed);
+}
+.fav-item:hover {
+	background-color: var(--surface-container-high);
+}
+.fav-item.selected {
+	background-color: var(--primary-container);
+}
+.fav-item .fav-code {
+	font-weight: 700;
+	color: var(--on-surface);
+}
+.fav-item .fav-price {
+	font-weight: 500;
+	color: var(--primary);
+	font-size: 0.9rem;
+}
+
+/* Overview Modal */
+.overview-container {
+	max-height: 60vh;
+	overflow-y: auto;
+	margin-bottom: 1rem;
+	border: 1px solid var(--outline);
+	border-radius: var(--border-radius-md);
+	background-color: var(--surface-container-low);
+}
+.overview-room {
+	border-bottom: 1px solid var(--outline);
+}
+.overview-room:last-child {
+	border-bottom: none;
+}
+.overview-room summary {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+	cursor: pointer;
+	font-weight: 700;
+	background-color: var(--surface-container-medium);
+}
+.overview-room summary:hover {
+	background-color: var(--surface-container-high);
+}
+.overview-room .overview-room-name {
+	color: var(--on-surface);
+}
+.overview-room .overview-room-name i.ph {
+	color: var(--primary);
+	margin-right: 0.25rem;
+}
+.overview-room .overview-room-total {
+	color: var(--on-surface);
+}
+.overview-item-list {
+	padding: 0.5rem;
+}
+.overview-item {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 0.5rem 1rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--border-radius-sm);
+	cursor: pointer;
+	transition: background-color var(--transition-speed);
+}
+.overview-item:hover {
+	background-color: var(--surface-container-high);
+}
+.overview-item-name {
+	grid-column: 1 / 3;
+	font-weight: 500;
+	color: var(--on-surface);
+}
+.overview-item-details {
+	grid-column: 2 / 3;
+	font-size: 0.85rem;
+	color: var(--on-surface-variant);
+	padding-left: 1.6rem; /* Align with name */
+}
+.overview-item-price {
+	grid-column: 3 / 4;
+	grid-row: 1 / 3; /* Span two rows */
+	align-self: center;
+	font-weight: 700;
+	color: var(--primary);
+	text-align: right;
+}
+.overview-totals {
+	padding-top: 1rem;
+	border-top: 2px solid var(--primary-container);
+}
+.summary-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+}
+.summary-row.discount span {
+	color: var(--danger);
+}
+.summary-row.total {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--primary);
+	border-top: 1px solid var(--outline);
+	padding-top: 0.75rem;
+}
+.summary-row.total span {
+	color: var(--primary);
+}
+.summary-row.vat-note {
+	font-size: 0.8rem;
+	color: var(--on-surface-variant);
+	justify-content: flex-end;
+}
+.empty-summary {
+	padding: 2rem 1rem;
+	text-align: center;
+	font-style: italic;
+	color: var(--on-surface-variant);
+}
+
+/* Lookbook Modal */
+#lookbook-report {
+	max-height: 75vh;
+	overflow-y: auto;
+	background-color: var(--surface-container-low);
+	border: 1px solid var(--outline);
+	border-radius: var(--border-radius-md);
+	padding: 1rem;
+}
+.lookbook-room h4 {
+	margin: 1.5rem 0 1rem 0;
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid var(--primary-container);
+	color: var(--primary);
+}
+.lookbook-room h4:first-child {
+	margin-top: 0;
+}
+.lookbook-item {
+	display: grid;
+	grid-template-columns: 100px 1fr;
+	gap: 1rem;
+	cursor: pointer;
+}
+.lookbook-item-visual {
+	width: 100px;
+	height: 100px;
+	border: 1px solid var(--outline);
+	background-color: var(--surface);
+	border-radius: var(--border-radius-md);
+	overflow: hidden;
+}
+.lookbook-item-details {
+	min-width: 0;
+}
+.lookbook-item-header {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	border-bottom: 1px solid var(--outline);
+	padding-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+.lookbook-item-title {
+	font-size: 1.1rem;
+	font-weight: 700;
+}
+.lookbook-item-price {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--primary);
+	flex-shrink: 0;
+}
+.lookbook-spec-table {
+	width: 100%;
+	font-size: 0.9rem;
+}
+.lookbook-spec-table td {
+	padding: 0.2rem 0;
+	vertical-align: top;
+}
+.lookbook-spec-table td:first-child {
+	width: 60px;
+	color: var(--on-surface-variant);
+}
+.lookbook-spec-table td:last-child {
+	font-weight: 500;
+	color: var(--on-surface);
+	word-break: break-all;
+}
+hr.lookbook-hr {
+	border: none;
+	border-top: 1px dashed var(--outline-variant);
+	margin: 1rem 0;
+}
+.lookbook-summary {
+	margin-bottom: 1rem;
+	padding: 1rem;
+	background-color: var(--surface);
+	border-radius: var(--border-radius-md);
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+.lookbook-customer-info {
+	font-size: 0.9rem;
+	line-height: 1.6;
+}
+.lookbook-totals {
+	text-align: right;
+	flex-shrink: 0;
+	padding-left: 1rem;
+}
+.lookbook-totals .grand-total {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--primary);
+}
+
+/* Dimension Modal */
+#dimensionInputContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: 1.5rem;
+}
+.dimension-input-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr auto;
+	gap: 0.5rem;
+	align-items: center;
+}
+.dimension-input-row .btn-remove-dimension-row {
+	margin-top: 0; /* Align with inputs */
+}
+
+/* Room Defaults & Force Apply (RCC) */
+.rcc-tabs { display: flex; border-bottom: 1px solid var(--outline); margin-bottom: 1rem; }
+.rcc-tabs .tab-link { padding: 0.75rem 1rem; border: none; background: none; cursor: pointer; color: var(--on-surface-variant); font-weight: 700; border-bottom: 3px solid transparent; }
+.rcc-tabs .tab-link.active { color: var(--primary); border-bottom-color: var(--primary); }
+.rcc-tab-content { display: none; }
+.rcc-tab-content.active { display: block; }
+.rcc-form-section { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 0.75rem; border-radius: var(--border-radius-md); background: var(--surface-container-low); margin-bottom: 1rem; }
+.rcc-form-section .form-group { margin-bottom: 0; }
+.rcc-toggle-group { display: flex; align-items: center; justify-content: space-between; grid-column: 1 / -1; padding: 0.5rem; }
+.rcc-toggle-group label { font-size: 1rem; font-weight: 700; color: var(--on-surface); margin-bottom: 0; }
+.rcc-footer { border-top: 1px solid var(--outline); padding-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.rcc-footer .btn-compact { padding: 0.7rem 1rem; min-height: 44px; }
+#roomDefaultsForceBtn { grid-column: 1 / 2; grid-row: 2 / 3; background-color: var(--surface); color: var(--danger); border: 1.5px solid var(--danger); }
+#roomDefaultsForceBtn:hover:not(:disabled) { background-color: var(--danger-container); }
+button[data-act="manage-favorites-from-defaults"] { grid-column: 1 / 3; grid-row: 1 / 2; background-color: var(--secondary-container); color: var(--on-secondary-container); }
+button[data-act="manage-favorites-from-defaults"]:hover:not(:disabled) { background-color: var(--primary-container); }
+#roomDefaultsCancelBtn { grid-column: 2 / 3; grid-row: 2 / 3; background-color: var(--surface); color: var(--primary); border: 1.5px solid var(--primary); }
+#roomDefaultsCancelBtn:hover:not(:disabled) { background-color: var(--primary-container); }
+#roomDefaultsConfirmBtn, #batchEditorConfirmBtn { grid-column: 1 / 3; grid-row: 3 / 4; background-color: var(--primary); color: var(--on-primary); border-color: var(--primary); font-weight: 700; }
+#roomDefaultsConfirmBtn:hover:not(:disabled), #batchEditorConfirmBtn:hover:not(:disabled) { filter: brightness(1.1); background-color: var(--primary); }
+#batchEditorConfirmBtn.hidden, #roomDefaultsApplyBtn.hidden, #roomDefaultsConfirmBtn.hidden, button[data-act="manage-favorites-from-defaults"].hidden { display: none; }
+@media (min-width: 601px) {
+    .rcc-footer { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; grid-template-columns: none; grid-template-rows: none; }
+    .rcc-footer .btn-compact { width: auto; white-space: nowrap; }
+    #roomDefaultsForceBtn { margin-right: auto; grid-column: auto; grid-row: auto; }
+    button[data-act="manage-favorites-from-defaults"] { width: auto; grid-column: auto; grid-row: auto; }
+    #roomDefaultsCancelBtn { width: auto; grid-column: auto; grid-row: auto; }
+    #roomDefaultsConfirmBtn { width: auto; grid-column: auto; grid-row: auto; }
+}

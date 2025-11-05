@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Marnthara Curtain Pricing Tool - แอปพลิเคชันสำหรับประเมินราคาผ้าม่านและของตกแต่ง">
+    <title>Marnthara - Tool</title>
+
+    <!-- [REFACTOR] ย้าย-CSS-ไป-import-ใน-main.ts-เพื่อให้-Vite-จัดการ -->
+
+    <!-- Fonts -->
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;500;700&display=swap"></noscript>
+
+    <!-- Icons -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+    </noscript>
+
+    <!-- [REFACTOR] เปลี่ยน-entry-point-เป็น-src/main.ts -->
+    <script type="module" src="/src/main.ts"></script>
+</head>
+<body>
+
+    <!-- Main App Container -->
+    <div id="app-container">
+        <!-- Header / Logo -->
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="https://placehold.co/100x100/DDE2FF/001B3F?text=LOGO" alt="Marnthara Logo" id="shopLogo" class="logo hidden">
+                <h1 id="shopNameDisplay">Marnthara</h1>
+            </div>
+            <div class="header-actions">
+                <!-- (Item 13) Responsive Sidebar Toggle -->
+                <button type="button" class="btn-icon btn-menu-toggle" id="menuToggleBtn" aria-label="เปิดเมนู">
+                    <i class="ph-bold ph-list"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- (Item 13) Main Menu Sidebar -->
+        <nav class="sidebar-menu" id="mainSidebar">
+            <div class="sidebar-header">
+                <h3>เมนู</h3>
+                <button type="button" class="btn-icon" id="menuCloseBtn" aria-label="ปิดเมนู">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <a href="#" id="overviewBtn" class="menu-item"><i class="ph ph-presentation-chart"></i> <span>สรุปภาพรวม</span></a>
+            <hr>
+            <a href="#" id="copySummaryBtn" class="menu-item"><i class="ph ph-copy"></i> <span>คัดลอกสรุป (LINE)</span></a>
+            <a href="#" id="imageReportBtn" class="menu-item"><i class="ph ph-image"></i> <span>รายงานภาพ</span></a>
+            <a href="#" id="pdfBtn" class="menu-item"><i class="ph ph-file-pdf"></i> <span>ใบเสนอราคา (PDF)</span></a>
+            <a href="#" id="sendDataBtn" class="menu-item"><i class="ph ph-paper-plane-tilt"></i> <span>ส่งข้อมูล</span></a>
+            <hr>
+            <a href="#" id="themeToggleBtn" class="menu-item"><i class="ph ph-circle-half"></i> <span>สลับธีม</span></a>
+            <hr>
+            <a href="#" id="importBtn" class="menu-item"><i class="ph ph-file-arrow-down"></i> <span>Import (.json)</span></a>
+            <a href="#" id="exportBtn" class="menu-item"><i class="ph ph-file-arrow-up"></i> <span>Export (.json)</span></a>
+            <hr>
+            <a href="#" id="importFavBtn" class="menu-item"><i class="ph ph-star"></i> <span>Import Favorites</span></a>
+            <a href="#" id="exportFavBtn" class="menu-item"><i class="ph ph-upload"></i> <span>Export Favorites</span></a>
+            <hr>
+            <a href="#" id="clearAllBtn" class="menu-item danger-item"><i class="ph ph-eraser"></i> <span>ล้างทุกรายการ</span></a>
+            <a href="#" id="deleteAllBtn" class="menu-item danger-item"><i class="ph ph-trash"></i> <span>ลบข้อมูลทั้งหมด</span></a>
+        </nav>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Customer Card -->
+        <!-- (Item 9) Visual Grouping: ใช้-class-customer-card-เพื่อแยก-UI -->
+<details class="card customer-card" id="customerCard" open>
+            <summary>
+                <div class="card-header-content">
+                    <h3><i class="ph-fill ph-user-circle"></i> ข้อมูลลูกค้า</h3>
+                    <div class="brief">ชื่อ เบอร์โทร และที่อยู่</div>
+                </div>
+            </summary>
+            <div class="card-content">
+                <div class="form-group full-width-item">
+                    <label for="customerNameInput">ชื่อลูกค้า (สำหรับใบเสนอราคา)</label>
+                    <input type="text" id="customerNameInput" name="customer_name" placeholder="ชื่อ-นามสกุล ลูกค้า">
+                </div>
+                <div class="form-group">
+                    <label for="customerPhoneInput">เบอร์โทรติดต่อ</label>
+                    <input type="tel" id="customerPhoneInput" name="customer_phone" placeholder="08x-xxx-xxxx">
+                </div>
+                <div class="form-group">
+                    <label for="customerAddressInput">ที่อยู่ (สำหรับติดตั้ง)</label>
+                    <textarea id="customerAddressInput" name="customer_address" rows="1" placeholder="ที่อยู่..."></textarea>
+                </div>
+            </div>
+        </details>
+
+        ...
+        <div class="footer-totals" id="discountBtnTrigger" role="button" tabindex="0" title="แก้ไขส่วนลด">
+            <span class="total-text" id="totalText">ยอดรวม: 0</span>
+            <span class="grand-total-text" id="grandTotalText">สุทธิ: 0</span>
+            <div class="hidden">
+                <label for="discountTypeInput">ประเภทส่วนลด</label>
+                <select id="discountTypeInput">
+                    <option value="amount">บาท</option>
+                    <option value="percent">%</option>
+                </select>
+                <label for="discountValueInput">มูลค่าส่วนลด</label>
+                <input type="number" id="discountValueInput" value="0">
+            </div>
+        </div>
+
+        <!-- Room Management Bar -->
+        <div class="room-management-bar">
+            <!-- (Item 5) QoL Shortcut: Duplicate Room (ปุ่มจะถูก-enable-เมื่อเลือกห้อง) -->
+            <button type="button" class="btn btn-secondary" id="duplicateRoomBtn" disabled>
+                <i class="ph ph-copy-simple"></i>
+                <span class="btn-text">คัดลอกห้อง</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="toggleAllRoomsBtn" data-state="collapse">
+                <i class="ph ph-arrows-in-simple"></i>
+                <span class="btn-text">ย่อทั้งหมด</span>
+            </button>
+            <button type="button" class="btn btn-primary" id="addRoomBtn">
+                <i class="ph ph-plus-circle"></i>
+                <span class="btn-text">เพิ่มห้อง</span>
+            </button>
+        </div>
+
+        <!-- Room Container -->
+        <main id="roomsContainer"></main>
+
+    </div><!-- /#app-container -->
+
+    <!-- Footer / Summary Bar -->
+    <footer class="footer-summary-bar" id="footerSummary">
+        <div class="summary-grid">
+            <div class="footer-actions">
+                <!-- (Item 1) Undo Button -->
+                <button type="button" class="btn-icon" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="เลิกทำการกระทำล่าสุด" disabled>
+                    <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                </button>
+                <button type="button" class="btn-icon" id="quickNavBtn" title="ไปที่ห้อง..." aria-label="ไปที่ห้อง">
+                    <i class="ph-bold ph-compass"></i>
+                </button>
+                <div class="menu-container">
+                    <div class="menu-dropdown" id="quickNavDropdown">
+                        <div id="quickNavRoomList"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- (Item 8) Visual Hierarchy: ปุ่มราคารวมที่เด่นชัด -->
+            <button type="button" class="footer-totals" id="discountBtnTrigger">
+                <span id="totalText">ยอดรวม: 0</span>
+                <span id="grandTotalText">สุทธิ: 0</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Templates (Hidden) -->
+    <div id="templates" class="hidden">
+
+        <!-- Room Card Template -->
+        <template id="roomTpl">
+            <details class="card room-card" open>
+                <summary>
+                    <div class="summary-title">
+                        <div class="room-name-wrapper">
+                            <label for="room_name_tpl" class="visually-hidden">ชื่อห้อง</label>
+                            <input type="text" name="room_name" id="room_name_tpl" placeholder="ชื่อห้อง" class="room-name-input">
+                            <span data-room-name-display class="room-name-display"></span>
+                        </div>
+                        <span data-room-brief class="summary-brief"></span>
+                    </div>
+                    <div class="summary-actions">
+                        <span data-room-total class="room-summary-total">0</span>
+                        <div class="room-options-container menu-container">
+                            <button type="button" class="btn-icon btn-room-options" data-act="toggle-room-menu" title="ตัวเลือกห้อง" aria-label="ตัวเลือกห้อง">
+                                <i class="ph-bold ph-gear"></i>
+                            </button>
+                            <div class="menu-dropdown room-options-menu">
+                                <a href="#" data-act="set-room-defaults"><i class="ph ph-sliders"></i> <span>ตั้งค่าเริ่มต้นห้อง</span></a>
+                                <hr>
+                                <a href="#" data-act="toggle-suspend-room"><i class="ph ph-pause-circle"></i> <span>ระงับ/ใช้งานห้องนี้</span></a>
+                                <a href="#" data-act="clear-room-items" class="danger-item"><i class="ph ph-eraser"></i> <span>ล้างทุกรายการในห้อง</span></a>
+                                <a href="#" data-act="del-room" class="danger-item"><i class="ph ph-trash"></i> <span>ลบห้องนี้</span></a>
+                            </div>
+                        </div>
+                        <div class="summary-toggle-icon"><i class="ph-bold ph-caret-down"></i></div>
+                    </div>
+                </summary>
+                <div class="card-content">
+                    <div class="items-container" data-container="items">
+                        <!-- Items will be inserted here -->
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-full-width btn-add-item" data-act="add-item">
+                        <i class="ph ph-plus"></i>
+                        <span class="btn-text">เพิ่มรายการ</span>
+                    </button>
+                </div>
+            </details>
+        </template>
+
+        <!-- Placeholder Item Template -->
+        <template id="placeholderTpl">
+             <div class="item-card placeholder-item" data-type="placeholder">
+                <div class="item-header">
+                    <div class="item-title" role="heading" aria-level="3">
+                        <span data-item-title></span>:&nbsp;
+                        <i class="ph-fill ph-placeholder"></i> <span class="placeholder-label">รอเลือกประเภท</span>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn-icon" data-act="toggle-suspend" title="ระงับ/ใช้งาน" aria-label="ระงับหรือใช้งานรายการนี้"><i class="ph-bold ph-pause-circle"></i></button>
+                        <button type="button" class="btn-icon" data-act="duplicate-item" title="คัดลอก" aria-label="คัดลอกรายการนี้"><i class="ph-bold ph-copy"></i></button>
+                        <button type="button" class="btn btn-icon danger" data-act="del-item" title="ลบ" aria-label="ลบรายการ"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+                <div class="placeholder-content">
+                    <div class="placeholder-dimensions single-line-dims">
+                        <i class="ph ph-arrows-out-line-horizontal"></i> กว้าง: <span data-placeholder-width>0.00</span> ม.
+                        &nbsp;&nbsp;<i class="ph ph-arrows-out-line-vertical"></i> สูง: <span data-placeholder-height>0.00</span> ม.
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-select-type" data-act="select-item-type">
+                        <i class="ph ph-list-plus"></i> <span>เลือกประเภทสินค้า</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Set (Curtain) Item Template -->
+        <template id="setTpl">
+            <div class="item-card set-item" data-type="set">
+                <div class="item-header">
+                    <div class="item-title" role="heading" aria-level="3">
+                        <span data-item-title></span>:&nbsp;
+                        <button type="button" class="item-type-changer" data-act="change-item-type">
+                            <i class="ph ph-person-simple-run"></i> <span class="item-type-display">ผ้าม่าน</span>
+                        </button>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn-icon" data-act="toggle-suspend" title="ระงับ/ใช้งาน"><i class="ph-bold ph-pause-circle"></i></button>
+                        <button type="button" class="btn-icon" data-act="duplicate-item" title="คัดลอก"><i class="ph-bold ph-copy"></i></button>
+                        <button type="button" class="btn-icon danger" data-act="del-item" title="ลบ"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+                <div class="item-content">
+                    <!-- (Item 12) Responsive Layout: ใช้-form-grid-2-ที่ตั้งค่าไว้ -->
+                    <div class="item-grid form-grid-2">
+                        <div class="form-group">
+                            <label for="set_width_m_tpl">กว้าง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="width_m" id="set_width_m_tpl" placeholder="เช่น 1.50 หรือ 150cm">
+                        </div>
+                        <div class="form-group">
+                            <label for="set_height_m_tpl">สูง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="height_m" id="set_height_m_tpl" placeholder="เช่น 2.50 หรือ 250cm">
+                        </div>
+                        <div class="form-group">
+                            <label for="set_style_tpl">รูปแบบ</label>
+                            <select name="set_style" id="set_style_tpl">
+                                <option value="ลอน">ลอน</option>
+                                <option value="ตาไก่">ตาไก่</option>
+                                <option value="จีบ">จีบ</option>
+                                <option value="ม่านพับ">ม่านพับ</option>
+                                <option value="ม่านแป๊บ">ม่านแป๊บ</option>
+                                <option value="หลุยส์">หลุยส์</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fabric_variant_tpl">ชนิดผ้า</label>
+                            <select name="fabric_variant" id="fabric_variant_tpl">
+                                <option value="ทึบ">ทึบ</option>
+                                <option value="ทึบ & โปร่ง">ทึบ & โปร่ง</option>
+                                <option value="โปร่ง">โปร่ง</option>
+                            </select>
+                        </div>
+
+                        <!-- (Item 7) Progressive Disclosure: ซ่อนส่วนนี้ไว้ -->
+                        <div class="details-advanced-toggle full-width-item">
+
+                            <div class="form-group-set fabric-group">
+                                <div class="form-group form-group-with-favorites">
+                                    <label for="set_price_per_m_tpl">ราคาผ้าทึบ</label>
+                                    <select name="set_price_per_m" id="set_price_per_m_tpl">
+                                        <!-- Options populated by JS -->
+                                    </select>
+                                    <button type="button" class="btn-icon btn-show-favs" data-act="show-favs" data-type="fabric" title="แสดงรายการโปรด" aria-label="แสดงรายการโปรดผ้าทึบ" disabled><i class="ph ph-star"></i></button>
+                                </div>
+                                <div class="form-group form-group-with-favorites">
+                                    <label for="fabric_code_tpl">รหัสผ้าทึบ</label>
+                                    <input type="text" name="fabric_code" id="fabric_code_tpl" data-favorite-type="fabric" placeholder="รหัสผ้า...">
+                                    <button type="button" class="btn-icon btn-add-fav" data-act="add-fav" data-type="fabric" title="เพิ่มเข้ารายการโปรด" aria-label="เพิ่มผ้าทึบเข้ารายการโปรด"><i class="ph-bold ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group-set sheer-group">
+                                <div class="form-group form-group-with-favorites">
+                                    <label for="set_sheer_price_per_m_tpl">ราคาผ้าโปร่ง</label>
+                                    <select name="set_sheer_price_per_m" id="set_sheer_price_per_m_tpl">
+                                        <!-- Options populated by JS -->
+                                    </select>
+                                    <button type="button" class="btn-icon btn-show-favs" data-act="show-favs" data-type="sheer" title="แสดงรายการโปรด" aria-label="แสดงรายการโปรดผ้าโปร่ง" disabled><i class="ph ph-star"></i></button>
+                                </div>
+                                <div class="form-group form-group-with-favorites">
+                                    <label for="sheer_fabric_code_tpl">รหัสผ้าโปร่ง</label>
+                                    <input type="text" name="sheer_fabric_code" id="sheer_fabric_code_tpl" data-favorite-type="sheer" placeholder="รหัสผ้า...">
+                                    <button type="button" class="btn-icon btn-add-fav" data-act="add-fav" data-type="sheer" title="เพิ่มเข้ารายการโปรด" aria-label="เพิ่มผ้าโปร่งเข้ารายการโปรด"><i class="ph-bold ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group-set louis-group">
+                                <div class="form-group">
+                                    <label for="set_louis_price_per_m_tpl">ราคาหลุยส์/เมตร</label>
+                                    <select name="set_louis_price_per_m" id="set_louis_price_per_m_tpl">
+                                        <!-- Options populated by JS -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="set_opening_style_tpl">รูปแบบเปิด</label>
+                                <select name="opening_style" id="set_opening_style_tpl">
+                                    <option value="แยกกลาง">แยกกลาง</option>
+                                    <option value="เก็บข้างเดียว">เก็บข้างเดียว</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="set_adjustment_side_tpl">เชือกปรับ</label>
+                                <select name="adjustment_side" id="set_adjustment_side_tpl">
+                                    <option value="ปรับขวา">ปรับขวา</option>
+                                    <option value="ปรับซ้าย">ปรับซ้าย</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width-item">
+                                <label for="set_notes_tpl">หมายเหตุ</label>
+                                <input type="text" name="notes" id="set_notes_tpl" placeholder="เช่น ติดตั้งที่...">
+                            </div>
+                            
+                            <!-- Hardware Settings -->
+                            <div class="full-width-item">
+                                <button type="button" class="btn btn-secondary btn-full-width" data-act="open-hardware-modal">
+                                    <i class="ph ph-wrench"></i> <span>ตั้งค่าอุปกรณ์ (ราง, ห่วง, ฯลฯ)</span>
+                                </button>
+                                <input type="hidden" name="track_color" value="ขาว">
+                                <input type="hidden" name="bracket_color" value="ขาว">
+                                <input type="hidden" name="finial_color" value="ขาว">
+                                <input type="hidden" name="grommet_color" value="เงิน">
+                                <input type="hidden" name="louis_valance" value="กล่องหลุยส์">
+                                <input type="hidden" name="louis_tassels" value="สีเข้ากับผ้า">
+                            </div>
+                        </div> <!-- /details-advanced-toggle -->
+
+                        <!-- More Details Button Wrapper -->
+                        <div class="more-btn-wrapper full-width-item">
+                            <button type="button" class="btn btn-secondary btn-full-width btn-toggle-details" data-act="toggle-details">
+                                <i class="ph ph-caret-down"></i> <span>แสดงรายละเอียดเพิ่มเติม</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-footer">
+                    <span class="item-total" data-item-total>0</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- AreaBased (Blinds, etc.) Item Template -->
+        <template id="areaBasedTpl">
+            <div class="item-card area-based-item" data-type="area_based">
+                <div class="item-header">
+                    <div class="item-title" role="heading" aria-level="3">
+                        <span data-item-title></span>:&nbsp;
+                        <button type="button" class="item-type-changer" data-act="change-item-type">
+                            <i class="ph ph-ruler"></i> <span class="item-type-display">ของตกแต่ง</span>
+                        </button>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn-icon" data-act="toggle-suspend" title="ระงับ/ใช้งาน"><i class="ph-bold ph-pause-circle"></i></button>
+                        <button type="button" class="btn-icon" data-act="duplicate-item" title="คัดลอก"><i class="ph-bold ph-copy"></i></button>
+                        <button type="button" class="btn-icon danger" data-act="del-item" title="ลบ"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+                <div class="item-content">
+                    <div class="item-grid form-grid-2">
+                        <div class="form-group">
+                            <label for="area_width_m_tpl">กว้าง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="area_width_m" id="area_width_m_tpl" placeholder="เช่น 1.50 หรือ 150cm">
+                        </div>
+                        <div class="form-group">
+                            <label for="area_height_m_tpl">สูง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="area_height_m" id="area_height_m_tpl" placeholder="เช่น 2.50 หรือ 250cm">
+                        </div>
+                        <div class="form-group form-group-with-favorites">
+                            <label for="area_price_sqyd_tpl">ราคา/ตร.หลา</label>
+                            <input type="number" inputmode="decimal" name="area_price_sqyd" id="area_price_sqyd_tpl" placeholder="ราคาต่อหน่วย...">
+                            <button type="button" class="btn-icon btn-show-favs" data-act="show-favs" data-type="item" title="แสดงรายการโปรด" aria-label="แสดงรายการโปรด" disabled><i class="ph ph-star"></i></button>
+                        </div>
+                        <div class="form-group form-group-with-favorites">
+                            <label for="area_code_tpl">รหัสสินค้า</label>
+                            <input type="text" name="area_code" id="area_code_tpl" data-favorite-type="item" placeholder="รหัสสินค้า...">
+                            <button type="button" class="btn-icon btn-add-fav" data-act="add-fav" data-type="item" title="เพิ่มเข้ารายการโปรด" aria-label="เพิ่มเข้ารายการโปรด"><i class="ph-bold ph-plus"></i></button>
+                        </div>
+
+                        <!-- (Item 7) Progressive Disclosure: ซ่อนส่วนนี้ไว้ -->
+                        <div class="details-advanced-toggle full-width-item">
+                            <!-- Dynamic fields for partition/pleated_screen -->
+                            <div class="form-group dynamic-field" data-visible-for="partition pleated_screen">
+                                <label for="area_opening_style_tpl">รูปแบบเปิด</label>
+                                <select name="opening_style" id="area_opening_style_tpl">
+                                    <option value="แยกกลาง">แยกกลาง</option>
+                                    <option value="เก็บข้างเดียว">เก็บข้างเดียว</option>
+                                </select>
+                            </div>
+                            <!-- Dynamic fields for blinds -->
+                            <div class="form-group dynamic-field" data-visible-for="wooden_blind roller_blind vertical_blind aluminum_blind">
+                                <label for="area_adjustment_side_tpl">เชือกปรับ</label>
+                                <select name="adjustment_side" id="area_adjustment_side_tpl">
+                                    <option value="ปรับขวา">ปรับขวา</option>
+                                    <option value="ปรับซ้าย">ปรับซ้าย</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width-item">
+                                <label for="area_notes_tpl">หมายเหตุ</label>
+                                <input type="text" name="notes" id="area_notes_tpl" placeholder="เช่น ติดตั้งที่...">
+                            </div>
+                        </div> <!-- /details-advanced-toggle -->
+
+                        <!-- More Details Button Wrapper -->
+                        <div class="more-btn-wrapper full-width-item">
+                            <button type="button" class="btn btn-secondary btn-full-width btn-toggle-details" data-act="toggle-details">
+                                <i class="ph ph-caret-down"></i> <span>แสดงรายละเอียดเพิ่มเติม</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-footer">
+                    <span class="item-total" data-item-total>0</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- Wallpaper Item Template -->
+        <template id="wallpaperTpl">
+            <div class="item-card wallpaper-item" data-type="wallpaper">
+                 <div class="item-header">
+                    <div class="item-title" role="heading" aria-level="3">
+                        <span data-item-title></span>:&nbsp;
+                        <button type="button" class="item-type-changer" data-act="change-item-type">
+                            <i class="ph ph-paint-roller"></i> <span class="item-type-display">วอลเปเปอร์</span>
+                        </button>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn-icon" data-act="toggle-suspend" title="ระงับ/ใช้งาน"><i class="ph-bold ph-pause-circle"></i></button>
+                        <button type="button" class="btn-icon" data-act="duplicate-item" title="คัดลอก"><i class="ph-bold ph-copy"></i></button>
+                        <button type="button" class="btn-icon danger" data-act="del-item" title="ลบ"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                </div>
+                <div class="item-content">
+                    <div class="walls-section">
+                        <p>ความกว้างผนัง (ม.)</p>
+                        <div class="walls-container" data-container="walls">
+                            <!-- Wall inputs populated by JS -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-small" data-act="add-wall">
+                            <i class="ph ph-plus"></i> <span>เพิ่มผนัง</span>
+                        </button>
+                    </div>
+                    <div class="item-grid form-grid-2">
+                        <div class="form-group">
+                            <label for="wp_height_m_tpl">สูง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="height_m" id="wp_height_m_tpl" placeholder="เช่น 2.50 หรือ 250cm">
+                        </div>
+
+                        <!-- (Item 7) Progressive Disclosure: ซ่อนส่วนนี้ไว้ -->
+                        <div class="details-advanced-toggle full-width-item">
+                            <div class="form-group form-group-with-favorites">
+                                <label for="wp_price_roll_tpl">ราคา/ม้วน</label>
+                                <input type="number" inputmode="decimal" name="price_per_roll" id="wp_price_roll_tpl" placeholder="ราคาต่อม้วน...">
+                                <button type="button" class="btn-icon btn-show-favs" data-act="show-favs" data-type="wallpaper" title="แสดงรายการโปรด" aria-label="แสดงรายการโปรด" disabled><i class="ph ph-star"></i></button>
+                            </div>
+                            <div class="form-group form-group-with-favorites">
+                                <label for="wp_code_tpl">รหัสวอลล์เปเปอร์</label>
+                                <input type="text" name="code" id="wp_code_tpl" data-favorite-type="wallpaper" placeholder="รหัส...">
+                                <button type="button" class="btn-icon btn-add-fav" data-act="add-fav" data-type="wallpaper" title="เพิ่มเข้ารายการโปรด" aria-label="เพิ่มเข้ารายการโปรด"><i class="ph-bold ph-plus"></i></button>
+                            </div>
+                            <div class="form-group">
+                                <label for="wp_install_cost_tpl">ค่าช่าง/ม้วน</label>
+                                <input type="number" inputmode="decimal" name="install_cost_per_roll" id="wp_install_cost_tpl" value="300" placeholder="ค่าติดตั้ง...">
+                            </div>
+                            <div class="form-group full-width-item">
+                                <label for="wp_notes_tpl">หมายเหตุ</label>
+                                <input type="text" name="notes" id="wp_notes_tpl" placeholder="เช่น ติดตั้งที่...">
+                            </div>
+                        </div> <!-- /details-advanced-toggle -->
+
+                        <!-- More Details Button Wrapper -->
+                        <div class="more-btn-wrapper full-width-item">
+                             <button type="button" class="btn btn-secondary btn-full-width btn-toggle-details" data-act="toggle-details">
+                                <i class="ph ph-caret-down"></i> <span>แสดงรายละเอียดเพิ่มเติม</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-footer">
+                    <span class="item-total" data-item-total>0</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- Wallpaper Wall Input Template -->
+        <template id="wallTpl">
+            <div class="wall-input-row">
+                <label for="wall_width_m_tpl" class="visually-hidden">ความกว้างผนัง</label>
+                <input type="number" step="0.01" inputmode="decimal" name="wall_width_m" id="wall_width_m_tpl" placeholder="กว้าง (ม.)">
+                <button type="button" class="btn-icon btn-icon-small danger" data-act="del-wall" title="ลบ" aria-label="ลบผนัง">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+        </template>
+
+        <!-- Favorites List Item Template -->
+        <template id="favItemTpl">
+            <a href="#" class="fav-item" data-act="select-fav" data-code="{CODE}" data-price="{RAW_PRICE}">
+                <span class="fav-item-code">{CODE}</span>
+                <span class="fav-item-price">{PRICE}</span>
+            </a>
+        </template>
+        <template id="favManagerItemTpl">
+             <a href="#" class="fav-item" data-act="select-fav-manager" data-code="{CODE}" data-price="{RAW_PRICE}">
+                <span class="fav-item-code">{CODE}</span>
+                <span class="fav-item-price">{PRICE}</span>
+            </a>
+        </template>
+
+    </div>
+
+    <!-- Modals -->
+    <div id="modalsContainer">
+
+        <!-- Dimension Entry Modal -->
+        <div class="modal-wrapper" id="dimensionModal">
+            <div class="modal-content" role="dialog" aria-labelledby="dimensionModalTitle">
+                <h3 id="dimensionModalTitle">ระบุขนาด (กว้าง x สูง)</h3>
+                <div id="dimensionInputContainer">
+                    <div class="dimension-input-row">
+                        <div class="form-group">
+                            <label for="modal_width_m_1">กว้าง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="modal_width_m" id="modal_width_m_1" placeholder="เช่น 1.50 หรือ 150cm">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal_height_m_1">สูง (ม.)</label>
+                            <input type="number" step="0.01" inputmode="decimal" name="modal_height_m" id="modal_height_m_1" placeholder="เช่น 2.50 หรือ 250cm">
+                        </div>
+                        <button type="button" class="btn-icon btn-icon-small danger btn-remove-dimension-row" data-act="remove-dimension-row" title="ลบขนาด" aria-label="ลบขนาดแถวนี้" disabled>
+                            <i class="ph-bold ph-x"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-small" data-act="add-dimension-row">
+                    <i class="ph ph-plus"></i> <span>เพิ่มขนาด (สำหรับม่านพับ)</span>
+                </button>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">ถัดไป</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirm Modal (QoL Item 4) -->
+        <div class="modal-wrapper" id="confirmModal">
+            <div class="modal-content" role="alertdialog" aria-labelledby="confirmModalTitle">
+                <h3 id="confirmModalTitle">ยืนยันการกระทำ</h3>
+                <p id="confirmModalBody">คุณแน่ใจหรือไม่?</p>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-danger" data-act="modal-confirm">ยืนยัน</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Discount Modal -->
+        <div class="modal-wrapper" id="discountModal">
+            <div class="modal-content" role="dialog" aria-labelledby="discountModalTitle">
+                <h3 id="discountModalTitle">ส่วนลด</h3>
+                <div class="discount-summary">
+                    <div class="discount-summary-item">
+                        <span>ยอดรวม</span>
+                        <strong id="discountModalSubtotal">0</strong>
+                    </div>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="discountTypeInput">ประเภทส่วนลด</label>
+                        <select id="discountTypeInput">
+                            <option value="amount">บาท (฿)</option>
+                            <option value="percent">เปอร์เซ็นต์ (%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="discountValueInput">จำนวนส่วนลด</label>
+                        <input type="number" inputmode="decimal" id="discountValueInput" placeholder="0">
+                    </div>
+                </div>
+                <hr>
+                <div class="discount-summary">
+                     <div class="discount-summary-item total">
+                        <span>คงเหลือ</span>
+                        <strong id="discountModalGrandTotal">0</strong>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">ตกลง</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overview Modal -->
+        <div class="modal-wrapper" id="overviewModal">
+            <div class="modal-content modal-lg" role="dialog" aria-labelledby="overviewModalTitle">
+                <div class="modal-header">
+                    <h3 id="overviewModalTitle">สรุปภาพรวม</h3>
+                    <button type="button" class="btn-icon" data-act="modal-cancel" title="ปิด" aria-label="ปิดหน้าต่าง"><i class="ph-bold ph-x"></i></button>
+                </div>
+                <div class="modal-body" id="overviewModalBody">
+                    <!-- Content generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Look Book Modal -->
+        <div class="modal-wrapper" id="lookbookModal">
+            <div class="modal-content modal-lg" role="dialog" aria-labelledby="lookbookModalTitle">
+                 <div class="modal-header">
+                    <h3 id="lookbookModalTitle">Client Look Book</h3>
+                    <button type="button" class="btn-icon" data-act="modal-cancel" title="ปิด" aria-label="ปิดหน้าต่าง"><i class="ph-bold ph-x"></i></button>
+                </div>
+                <div class="modal-body" id="lookbookModalBody">
+                    <!-- Content generated by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copy Summary Modal -->
+        <div class="modal-wrapper" id="copySummaryModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="copySummaryModalTitle">
+                <h3 id="copySummaryModalTitle">เลือกสรุปที่จะคัดลอก</h3>
+                <div class="modal-options-list">
+                    <a href="#" class="option-item" data-type="customer">
+                        <strong><i class="ph-fill ph-user"></i> ส่งให้ลูกค้า</strong>
+                        <span>สรุปราคาแบบย่อ พร้อมข้อมูลติดต่อ</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="sew">
+                        <strong><i class="ph-fill ph-scissors"></i> ส่งช่างเย็บผ้า</strong>
+                        <span>รายละเอียดขนาด, รูปแบบ, รหัสผ้า</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="order">
+                        <strong><i class="ph-fill ph-package"></i> รายการสั่งของ</strong>
+                        <span>สรุปวัสดุสำหรับสั่งซื้อ</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="full">
+                        <strong><i class="ph-fill ph-files"></i> รายละเอียดทั้งหมด</strong>
+                        <span>ข้อมูลทั้งหมดสำหรับทำบัญชีและสรุปวัสดุ</span>
+                    </a>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm" disabled>คัดลอก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Report Modal -->
+        <div class="modal-wrapper" id="imageReportModal">
+             <div class="modal-content modal-options" role="dialog" aria-labelledby="imageReportModalTitle">
+                <h3 id="imageReportModalTitle">เลือกรายงานภาพ</h3>
+                <div class="modal-options-list">
+                    <a href="#" class="option-item" data-type="lookbook">
+                        <strong><i class="ph-fill ph-paint-brush"></i> Client Look Book</strong>
+                        <span>ใบเสนอราคาฉบับดีไซน์สำหรับลูกค้า</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="jobcard">
+                        <strong><i class="ph-fill ph-user-gear"></i> Production Job Cards</strong>
+                        <span>ใบสั่งผลิตแยกชิ้นสำหรับช่างเย็บผ้า</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="po">
+                        <strong><i class="ph-fill ph-truck"></i> Purchase Order</strong>
+                        <span>สรุปรายการวัสดุสำหรับสั่งซื้อ</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="board">
+                        <strong><i class="ph-fill ph-trello-logo"></i> Project Board</strong>
+                        <span>กระดานสรุปภาพรวมสถานะโปรเจกต์</span>
+                    </a>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm" disabled>สร้างเอกสาร</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Options Modal -->
+        <div class="modal-wrapper" id="pdfOptionsModal">
+            <div class="modal-content" role="dialog" aria-labelledby="pdfOptionsModalTitle">
+                <h3 id="pdfOptionsModalTitle">ตัวเลือกใบเสนอราคา</h3>
+                <fieldset class="form-group">
+                    <legend>รูปแบบภาษีมูลค่าเพิ่ม (VAT)</legend>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="vat_option" value="included" checked>
+                            <span>รวม VAT 7%</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="vat_option" value="excluded">
+                            <span>ไม่รวม VAT</span>
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend>รายละเอียดรายการ (ขนาด/หมายเหตุ)</legend>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="details_option" value="show" checked>
+                            <span>แสดงรายละเอียด</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="details_option" value="hide">
+                            <span>ซ่อนรายละเอียด</span>
+                        </label>
+                    </div>
+                </fieldset>
+                <div class="form-group range-slider-group">
+                    <label for="pdfPageBreakLines">พื้นที่สำรองท้ายหน้า (บรรทัด)</label>
+                    <div class="range-wrapper">
+                        <input type="range" id="pdfPageBreakLines" name="page_break_lines" min="0" max="10" value="3">
+                        <span class="range-slider-value">3</span>
+                    </div>
+                    <small>ป้องกันการเหลือรายการเดียวในหน้าสุดท้าย (แนะนำ 2-4)</small>
+                </div>
+                <hr>
+                <fieldset class="form-group">
+                    <legend>วิธีสร้างเอกสาร</legend>
+                    <small>วิธีที่ 1 ให้ผลลัพธ์ดีที่สุด / หากหน้าขาวให้ลองวิธีที่ 2</small>
+                    <select id="pdfRenderMethod">
+                        <option value="jspdf" selected>วิธีที่ 1: ดาวน์โหลด PDF (คมชัดสุด)</option>
+                        <option value="print">วิธีที่ 2: ใช้ Browser พิมพ์ (แนะนำ)</option>
+                        <option value="html">วิธีที่ 3: ดาวน์โหลด HTML (สำรอง)</option>
+                    </select>
+                </fieldset>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">สร้างเอกสาร</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Favorites Modal -->
+        <div class="modal-wrapper" id="importFavoritesModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="importFavoritesModalTitle">
+                <h3 id="importFavoritesModalTitle">จัดการ 'รายการโปรด'</h3>
+                <p>ไฟล์ที่นำเข้ามีข้อมูล 'รายการโปรด' อยู่ด้วย โปรดเลือกวิธีจัดการ:</p>
+                <div class="modal-options-list">
+                    <a href="#" class="option-item" data-type="overwrite">
+                        <strong><i class="ph-fill ph-warning-circle"></i> เขียนทับ (Overwrite)</strong>
+                        <span>ใช้ 'รายการโปรด' จากไฟล์นี้ และลบของเก่าทั้งหมด</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="merge">
+                        <strong><i class="ph-fill ph-git-merge"></i> รวมข้อมูล (Merge)</strong>
+                        <span>เพิ่ม 'รายการโปรด' ใหม่จากไฟล์ โดยไม่ลบของเก่า</span>
+                    </a>
+                    <a href="#" class="option-item" data-type="skip">
+                        <strong><i class="ph-fill ph-sign-out"></i> ข้าม (Skip)</strong>
+                        <span>ไม่ต้องทำอะไรกับ 'รายการโปรด' และใช้ข้อมูลเก่าต่อไป</span>
+                    </a>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm" disabled>ตกลง</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites List Modal -->
+        <div class="modal-wrapper" id="favListModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="favListModalTitle">
+                <h3 id="favListModalTitle">เลือก <span id="favListModalType"></span></h3>
+                <div class="modal-body modal-body-scrollable" id="favListModalBody">
+                    <!-- Favorites generated by JS -->
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="manageFavsBtn" data-act="manage-favs">
+                        <i class="ph ph-pencil-simple"></i> <span>จัดการ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites Manager Modal -->
+        <div class="modal-wrapper" id="favManagerModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="favManagerModalTitle">
+                <h3 id="favManagerModalTitle">จัดการ <span id="favManagerModalType"></span></h3>
+                <div class="modal-body modal-body-scrollable" id="favManagerModalBody">
+                    <!-- Favorites generated by JS -->
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ปิด</button>
+                    <button type="button" class="btn btn-secondary" data-act="add-new-fav"><i class="ph ph-plus"></i> เพิ่มรายการ</button>
+                    <button type="button" class="btn btn-secondary" data-act="edit-selected-fav" disabled><i class="ph ph-pencil-simple"></i> แก้ไข</button>
+                    <button type="button" class="btn btn-danger" data-act="del-selected-fav" disabled><i class="ph ph-trash"></i> ลบ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorite Add Modal -->
+        <div class="modal-wrapper" id="favAddModal">
+            <div class="modal-content" role="dialog" aria-labelledby="favAddModalTitle">
+                <h3 id="favAddModalTitle">เพิ่มรายการโปรด</h3>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="fav_code_add">รหัส</label>
+                        <input type="text" name="fav_code_add" placeholder="รหัส...">
+                    </div>
+                    <div class="form-group">
+                        <label for="fav_price_add">ราคา</label>
+                        <input type="number" inputmode="decimal" name="fav_price_add" placeholder="ราคา...">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">บันทึก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorite Edit Modal -->
+        <div class="modal-wrapper" id="favEditModal">
+            <div class="modal-content" role="dialog" aria-labelledby="favEditModalTitle">
+                <h3 id="favEditModalTitle">แก้ไขรายการโปรด</h3>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="fav_code_edit">รหัส</label>
+                        <input type="text" name="fav_code_edit" placeholder="รหัส...">
+                    </div>
+                    <div class="form-group">
+                        <label for="fav_price_edit">ราคา</label>
+                        <input type="number" inputmode="decimal" name="fav_price_edit" placeholder="ราคา...">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">บันทึก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Select Item Type Modal -->
+        <div class="modal-wrapper" id="itemTypeModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="itemTypeModalTitle">
+                <h3 id="itemTypeModalTitle">เลือกประเภทรายการ</h3>
+                <div class="modal-options-list item-type-list">
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="set" checked>
+                        <strong><i class="ph-fill ph-person-simple-run"></i> ผ้าม่าน</strong>
+                        <span>Curtain, Sheer, Louis</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="wallpaper">
+                        <strong><i class="ph-fill ph-paint-roller"></i> วอลล์</strong>
+                        <span>Wallpaper</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="wooden_blind">
+                        <strong><i class="ph-fill ph-table"></i> มู่ลี่ไม้</strong>
+                        <span>Wooden Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="roller_blind">
+                        <strong><i class="ph-fill ph-scroll"></i> ม่านม้วน</strong>
+                        <span>Roller Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="vertical_blind">
+                        <strong><i class="ph-fill ph-rows"></i> ปรับแสง</strong>
+                        <span>Vertical Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="aluminum_blind">
+                        <strong><i class="ph-fill ph-stack"></i> อลูมิเนียม</strong>
+                        <span>Aluminium</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="partition">
+                        <strong><i class="ph-fill ph-columns"></i> ฉากกั้นห้อง</strong>
+                        <span>PVC Partition</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="item_type_option" value="pleated_screen">
+                        <strong><i class="ph-fill ph-squares-four"></i> มุ้งจีบ</strong>
+                        <span>Pleated Screen</span>
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">ยืนยัน</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hardware (Curtain) Settings Modal -->
+        <div class="modal-wrapper" id="hardwareModal">
+            <div class="modal-content" role="dialog" aria-labelledby="hardwareModalTitle">
+                <h3 id="hardwareModalTitle">ตั้งค่าอุปกรณ์ม่าน</h3>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="hw_track_color">สีราง</label>
+                        <select id="hw_track_color" name="track_color">
+                            <option>ดำ</option>
+                            <option>ขาว</option>
+                            <option>ไม้สัก</option>
+                            <option>โอ๊คเข้ม</option>
+                            <option>โอ๊คแดง</option>
+                            <option>อลูมิเนียม</option>
+                            <option>เทาเข้ม</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hw_bracket_color">สีขาจับ</label>
+                        <select id="hw_bracket_color" name="bracket_color">
+                            <option>ดำ</option>
+                            <option>ขาว</option>
+                            <option>ไม้สัก</option>
+                            <option>โอ๊คเข้ม</option>
+                            <option>โอ๊คแดง</option>
+                            <option>อลูมิเนียม</option>
+                            <option>เทาเข้ม</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hw_finial_color">สีหัวราง</label>
+                        <select id="hw_finial_color" name="finial_color">
+                            <option>ดำ</option>
+                            <option>ขาว</option>
+                            <option>ไม้สัก</option>
+                            <option>โอ๊คเข้ม</option>
+                            <option>โอ๊คแดง</option>
+                            <option>อลูมิเนียม</option>
+                            <option>เทาเข้ม</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hw_grommet_color">สีห่วงตาไก่</label>
+                        <select id="hw_grommet_color" name="grommet_color">
+                            <option>ดำ</option>
+                            <option>ขาว</option>
+                            <option>เงิน</option>
+                            <option>ทองเหลือง</option>
+                            <option>น้ำตาล</option>
+                            <option>รมดำ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hw_louis_valance">รูปแบบหัวหลุยส์</label>
+                        <select id="hw_louis_valance" name="louis_valance">
+                            <option>กล่องหลุยส์</option>
+                            <option>รางโชว์ (สำหรับหลุยส์)</option>
+                            <option>อื่นๆ (ระบุในหมายเหตุ)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hw_louis_tassels">พู่ / สายรวบ</label>
+                        <select id="hw_louis_tassels" name="louis_tassels">
+                            <option>สีเข้ากับผ้า</option>
+                            <option>สีตัด (ระบุในหมายเหตุ)</option>
+                            <option>ไม่มี</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="checkbox-group">
+                    <input type="checkbox" id="hwApplyToRoom">
+                    <span>ใช้กับทุกรายการ 'ผ้าม่าน' ในห้องนี้</span>
+                </label>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">ตกลง</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Favorites Type Modal -->
+        <div class="modal-wrapper" id="manageFavsTypeModal">
+             <div class="modal-content modal-options" role="dialog" aria-labelledby="manageFavsTypeModalTitle">
+                <h3 id="manageFavsTypeModalTitle">เลือกประเภทรายการโปรด</h3>
+                <div class="modal-body modal-body-scrollable" id="manageFavsTypeBody">
+                    <!-- Options generated by JS -->
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm" disabled>จัดการ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Defaults Modal -->
+        <div class="modal-wrapper" id="roomDefaultsModal">
+            <div class="modal-content modal-lg" role="dialog" aria-labelledby="roomDefaultsModalTitle">
+                <div class="modal-header">
+                    <h3 id="roomDefaultsModalTitle">ตั้งค่าเริ่มต้นสำหรับห้อง</h3>
+                    <button type="button" class="btn-icon" data-act="modal-cancel" title="ปิด" aria-label="ปิดหน้าต่าง"><i class="ph-bold ph-x"></i></button>
+                </div>
+                <div class="modal-body modal-body-scrollable">
+                    <form id="roomDefaultsForm">
+                        <div class="rcc-tabs">
+                            <!-- Tabs here -->
+                        </div>
+                        <div class="rcc-tab-content-container">
+                            <!-- Content Panels here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer rcc-footer">
+                    <button type="button" class="btn btn-secondary btn-compact" id="roomDefaultsForceBtn" data-act="force-apply-defaults" title="บังคับใช้ค่ากับทุกรายการในห้องนี้">
+                        <i class="ph ph-arrow-down"></i> <span class="btn-text">บังคับใช้</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-compact" data-act="manage-favorites-from-defaults">
+                        <i class="ph ph-star"></i> <span class="btn-text">จัดการโปรด</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-compact" id="roomDefaultsCancelBtn" data-act="modal-cancel">
+                        <i class="ph ph-x-circle"></i> <span class="btn-text">ยกเลิก</span>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-compact" id="roomDefaultsConfirmBtn" data-act="modal-confirm">
+                        <i class="ph ph-check-circle"></i> <span class="btn-text">บันทึกค่าเริ่มต้น</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Force Apply Modal -->
+        <div class="modal-wrapper" id="forceApplyModal">
+             <div class="modal-content" role="dialog" aria-labelledby="forceApplyModalTitle">
+                <h3 id="forceApplyModalTitle">บังคับใช้ค่าทั้งหมด</h3>
+                <p>เลือกประเภท, กรอกรหัสและราคา เพื่ออัปเดตทุกรายการที่ตรงกันใน *ทุกห้อง*</p>
+                <form id="forceApplyForm">
+                    <div class="form-group">
+                        <label for="forceApplyType">ประเภทรายการ</label>
+                        <input type="text" id="forceApplySelectedTypeDisplay" readonly disabled placeholder="-- เลือกประเภท --">
+                        <input type="hidden" name="force_apply_type_hidden">
+                        <button type="button" class="btn btn-secondary btn-full-width" data-act="select-force-apply-type">
+                            <i class="ph ph-list"></i> <span>เลือกประเภท</span>
+                        </button>
+                    </div>
+                    <div class="form-group form-group-with-favorites">
+                        <label for="force_apply_code">รหัส</label>
+                        <input type="text" name="force_apply_code" placeholder="รหัส...">
+                        <button type="button" class="btn-icon btn-show-favs" data-act="show-favs" data-type="" title="แสดงรายการโปรด" aria-label="แสดงรายการโปรด" disabled><i class="ph ph-star"></i></button>
+                    </div>
+                    <div class="form-group">
+                        <label for="force_apply_price">ราคา</label>
+                        <input type="number" inputmode="decimal" name="force_apply_price" placeholder="ราคา...">
+                    </div>
+                </form>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-danger" data-act="modal-confirm" id="forceApplyConfirmBtn">
+                        <i class="ph ph-warning"></i> <span>บังคับใช้</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Force Apply Type Selection Modal -->
+        <div class="modal-wrapper" id="forceApplyTypeModal">
+            <div class="modal-content modal-options" role="dialog" aria-labelledby="forceApplyTypeModalTitle">
+                <h3 id="forceApplyTypeModalTitle">เลือกประเภทที่จะบังคับใช้</h3>
+                 <div class="modal-options-list item-type-list">
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="fabric">
+                        <strong><i class="ph-fill ph-rows"></i> ผ้าทึบ</strong>
+                        <span>(ผ้าม่าน)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="sheer">
+                        <strong><i class="ph-fill ph-waves"></i> ผ้าโปร่ง</strong>
+                        <span>(ผ้าม่าน)</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="wallpaper">
+                        <strong><i class="ph-fill ph-paint-roller"></i> วอลล์</strong>
+                        <span>Wallpaper</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="wooden_blind">
+                        <strong><i class="ph-fill ph-table"></i> มู่ลี่ไม้</strong>
+                        <span>Wooden Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="roller_blind">
+                        <strong><i class="ph-fill ph-scroll"></i> ม่านม้วน</strong>
+                        <span>Roller Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="vertical_blind">
+                        <strong><i class="ph-fill ph-rows"></i> ปรับแสง</strong>
+                        <span>Vertical Blinds</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="aluminum_blind">
+                        <strong><i class="ph-fill ph-stack"></i> อลูมิเนียม</strong>
+                        <span>Aluminium</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="partition">
+                        <strong><i class="ph-fill ph-columns"></i> ฉากกั้นห้อง</strong>
+                        <span>PVC Partition</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="force_apply_type_option" value="pleated_screen">
+                        <strong><i class="ph-fill ph-squares-four"></i> มุ้งจีบ</strong>
+                        <span>Pleated Screen</span>
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-act="modal-cancel">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" data-act="modal-confirm">เลือก</button>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- /#modalsContainer -->
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite">
+        <i class="ph-fill ph-info"></i>
+        <span id="toastMessage"></span>
+    </div>
+    
+    <!-- Printable Content (Hidden) -->
+    <div id="printable-content" aria-hidden="true"></div>
+
+</body>
+</html>

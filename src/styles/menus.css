@@ -1,0 +1,263 @@
+/* src/styles/menus.css */
+/* (ไฟล์เดิมจาก-styles_02.zip) */
+@import url('./themes.css'); /* Import themes for variables */
+
+/* --- MENUS --- */
+.menu-container {
+	position: relative; /* Anchor for the dropdown */
+}
+
+.menu-dropdown {
+	position: absolute;
+	top: calc(100% + 8px); /* Position below the button */
+	right: 0; /* Align to the right */
+	background-color: var(--surface);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--shadow-lg);
+	border: 1px solid var(--outline);
+	overflow: hidden; /* Clip corners */
+	display: flex;
+	flex-direction: column;
+	width: max-content; /* Adjust width to content */
+	min-width: 200px; /* Minimum width */
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px); /* Initial animation state */
+	transition: all var(--transition-speed) ease;
+	z-index: 110; /* Above header content */
+}
+
+.menu-dropdown.show {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.menu-dropdown a {
+	padding: 0.75rem 1.25rem;
+	text-decoration: none;
+	color: var(--on-surface);
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	transition: background-color var(--transition-speed);
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+.menu-dropdown a:hover {
+	background-color: var(--surface-container-high);
+}
+.menu-dropdown a i.ph {
+	font-size: 1.25rem;
+	color: var(--primary);
+	flex-shrink: 0;
+}
+.menu-dropdown a.danger {
+	color: var(--danger);
+}
+.menu-dropdown a.danger i.ph {
+	color: var(--danger);
+}
+.menu-dropdown a.danger:hover {
+	background-color: var(--danger-container);
+	color: var(--on-danger-container);
+}
+
+.menu-divider {
+	height: 1px;
+	background-color: var(--outline-variant);
+	margin: 0.25rem 0;
+}
+
+/* Sidebar Menu (QoL Item 13) */
+#mainSidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 300px;
+	max-width: 90%;
+	background-color: var(--surface);
+	border-right: 1px solid var(--outline);
+	box-shadow: var(--shadow-lg);
+	z-index: 300;
+	transform: translateX(-100%);
+	transition: transform var(--transition-speed) ease;
+	display: flex;
+	flex-direction: column;
+}
+#mainSidebar.show {
+	transform: translateX(0);
+}
+
+#sidebarOverlay {
+	position: fixed;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 299;
+	opacity: 0;
+	visibility: hidden;
+	transition: all var(--transition-speed);
+}
+#sidebarOverlay.show {
+	opacity: 1;
+	visibility: visible;
+}
+
+.sidebar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 0.5rem 0.75rem 1.25rem;
+	border-bottom: 1px solid var(--outline);
+}
+.sidebar-header h2 {
+	font-size: 1.5rem;
+	color: var(--primary);
+	margin: 0;
+}
+.sidebar-nav {
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	flex-grow: 1;
+	overflow-y: auto;
+}
+.sidebar-nav a {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.8rem 1rem;
+	border-radius: var(--border-radius-md);
+	text-decoration: none;
+	color: var(--on-surface-variant);
+	font-weight: 700;
+	font-size: 1rem;
+}
+.sidebar-nav a:hover {
+	background-color: var(--surface-container-high);
+	color: var(--on-surface);
+}
+.sidebar-nav a i.ph {
+	font-size: 1.4rem;
+	color: var(--primary);
+	width: 30px; /* Align icons */
+	text-align: center;
+}
+.sidebar-nav a.danger {
+	color: var(--danger);
+}
+.sidebar-nav a.danger i.ph {
+	color: var(--danger);
+}
+.sidebar-nav a.danger:hover {
+	background-color: var(--danger-container);
+	color: var(--on-danger-container);
+}
+
+/* Footer Quick Nav */
+#quickNavDropdown {
+	bottom: calc(100% + 8px); /* Position above footer */
+	top: auto; /* Override default */
+	left: 0;
+	right: auto;
+	max-height: 40vh; /* Limit height */
+	overflow-y: auto;
+	min-width: 250px;
+}
+#quickNavDropdown #quickNavRoomList {
+	display: flex;
+	flex-direction: column;
+}
+#quickNavDropdown #quickNavRoomList a {
+	padding: 0.6rem 1rem;
+	font-size: 0.95rem;
+	border-bottom: 1px solid var(--outline);
+}
+#quickNavDropdown #quickNavRoomList a:last-child {
+	border-bottom: none;
+}
+#quickNavDropdown #quickNavRoomList a.is-active {
+	background-color: var(--primary-container);
+	color: var(--primary);
+	font-weight: 700;
+}
+.nav-empty {
+	padding: 1rem;
+	color: var(--on-surface-variant);
+	font-style: italic;
+	text-align: center;
+}
+#quickNavDropdown #quickNavRoomList a i.ph {
+	font-size: 1.1rem;
+	margin-right: 0.25rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#quickNavDropdown #quickNavRoomList a:hover {
+	background-color: var(--surface-container);
+}
+
+/* Room Options Menu (inside Room Card) */
+/* Position relative to the gear icon container */
+.room-options-container .room-options-menu {
+	position: absolute;
+	top: calc(100% + 4px); /* Position below gear icon */
+	right: 0; /* Align right */
+	background-color: var(--surface);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--shadow-lg);
+	border: 1px solid var(--outline);
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+	min-width: 180px; /* Minimum width */
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all var(--transition-speed) ease;
+	z-index: 120; /* Above other room content */
+	overflow: hidden;
+}
+
+.room-options-menu.show {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.room-options-menu a {
+	padding: 0.75rem 1.25rem;
+	text-decoration: none;
+	color: var(--on-surface);
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	transition: background-color var(--transition-speed);
+	font-size: 0.95rem;
+	font-weight: 500;
+}
+.room-options-menu a:hover {
+	background-color: var(--surface-container-high);
+}
+.room-options-menu a i.ph {
+	font-size: 1.25rem;
+	color: var(--primary);
+	flex-shrink: 0;
+}
+.room-options-menu a.danger {
+	color: var(--danger);
+}
+.room-options-menu a.danger i.ph {
+	color: var(--danger);
+}
+.room-options-menu a.danger:hover {
+	background-color: var(--danger-container);
+	color: var(--on-danger-container);
+}
+.room-options-menu .menu-divider {
+	margin: 0.25rem 0;
+}

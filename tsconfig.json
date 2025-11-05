@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "moduleResolution": "bundler",
+    "strict": true, // (ตามข้อ 5) เปิดใช้ Strict Mode เพื่อ QoL และความแม่นยำ
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noEmit": true, // Vite_จัดการการ-emit-เราแค่-type-check
+    "isolatedModules": true,
+    "allowJs": true, // อนุญาตให้-import-ไฟล์-js-ระหว่างการย้าย-refactor
+    "resolveJsonModule": true,
+    "types": ["vite/client"] // เพิ่ม-types-สำหรับ-Vite
+  },
+  "include": ["src"] // บอก-TypeScript-ให้สแกนเฉพาะโฟลเดอร์-src
+}
