@@ -6,7 +6,7 @@ interface UIState {
     activeFavoriteInput: string | null;
     favManagerChangesMade: boolean;
     selectedFavItem: string | null;
-    activeHardwareItem: string | null; // new: currently-active hardware item id/code
+    activeHardwareItem: string | null;
 }
 
 const state: UIState = {
@@ -22,28 +22,14 @@ export const getIsLocked = (): boolean => state.isLocked;
 export const getActiveFavoriteInput = (): string | null => state.activeFavoriteInput;
 export const getFavManagerChangesMade = (): boolean => state.favManagerChangesMade;
 export const getSelectedFavItem = (): string | null => state.selectedFavItem;
-export const getActiveHardwareItem = (): string | null => state.activeHardwareItem; // <- added
+export const getActiveHardwareItem = (): string | null => state.activeHardwareItem;
 
 // Setters
-export const setIsLocked = (value: boolean): void => {
-    state.isLocked = Boolean(value);
-};
-
-export const setActiveFavoriteInput = (value: string | null): void => {
-    state.activeFavoriteInput = value;
-};
-
-export const setFavManagerChangesMade = (value: boolean): void => {
-    state.favManagerChangesMade = Boolean(value);
-};
-
-export const setSelectedFavItem = (value: string | null): void => {
-    state.selectedFavItem = value;
-};
-
-export const setActiveHardwareItem = (value: string | null): void => {
-    state.activeHardwareItem = value;
-};
+export const setIsLocked = (value: boolean): void => { state.isLocked = Boolean(value); };
+export const setActiveFavoriteInput = (value: string | null): void => { state.activeFavoriteInput = value; };
+export const setFavManagerChangesMade = (value: boolean): void => { state.favManagerChangesMade = Boolean(value); };
+export const setSelectedFavItem = (value: string | null): void => { state.selectedFavItem = value; };
+export const setActiveHardwareItem = (value: string | null): void => { state.activeHardwareItem = value; };
 
 // Reset helper
 export const resetState = (): void => {
@@ -54,13 +40,12 @@ export const resetState = (): void => {
     state.activeHardwareItem = null;
 };
 
-/**
- * Listener management for "room defaults" modal (or similar modal)
- * - Allows modules to register event listeners tied to modal or controls,
- *   and later remove them all via clearRoomDefaultsModalListeners().
- *
- * This prevents leaking listeners across modal open/close or across merges.
- */
+// Current room defaults element reference (for ui-modals and related modules)
+let currentRoomDefaultsEl: HTMLElement | null = null;
+export const setCurrentRoomDefaultsEl = (el: HTMLElement | null): void => { currentRoomDefaultsEl = el; };
+export const getCurrentRoomDefaultsEl = (): HTMLElement | null => currentRoomDefaultsEl;
+
+// Listener registry for room defaults modal
 type RegisteredListener = {
     el: EventTarget;
     type: string;
@@ -80,20 +65,19 @@ export const registerRoomDefaultsListener = (
     options?: boolean | AddEventListenerOptions
 ): void => {
     try {
-        // addEventListener may throw if element is invalid — guard
         if ((el as Element)?.addEventListener) {
             (el as Element).addEventListener(type, handler as EventListener, options);
         } else if ((el as Window)?.addEventListener) {
             (el as Window).addEventListener(type, handler as EventListener, options);
         }
     } catch (e) {
-        // ignore silently — registration best-effort
+        // ignore (best-effort)
     }
     roomDefaultsListeners.push({ el, type, handler, options });
 };
 
 /**
- * Remove a previously-registered listener (optional per-item removal)
+ * Unregister a specific listener (optional)
  */
 export const unregisterRoomDefaultsListener = (
     el: EventTarget,
@@ -107,10 +91,8 @@ export const unregisterRoomDefaultsListener = (
         } else if ((el as Window)?.removeEventListener) {
             (el as Window).removeEventListener(type, handler as EventListener, options);
         }
-    } catch (e) {
-        // ignore
-    }
-    // remove matching entries from registry
+    } catch (e) { /* ignore */ }
+
     for (let i = roomDefaultsListeners.length - 1; i >= 0; i--) {
         const r = roomDefaultsListeners[i];
         if (r.el === el && r.type === type && r.handler === handler) {
@@ -121,7 +103,6 @@ export const unregisterRoomDefaultsListener = (
 
 /**
  * Clear all listeners registered via registerRoomDefaultsListener()
- * Call this when closing/destroying the modal to avoid duplicate listeners.
  */
 export const clearRoomDefaultsModalListeners = (): void => {
     for (const { el, type, handler, options } of roomDefaultsListeners) {
