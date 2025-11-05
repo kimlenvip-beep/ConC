@@ -1,6 +1,3 @@
-// src/lib/config.ts
-=======
->>>>>>> cb8a02287ec00b14740ece1ee9dc00b3aa13a238
 import type { ShopConfig, ItemConfig, PricingConfig } from '../types';
 
 export const APP_VERSION = "vite-ts/7.0.1";
@@ -9,10 +6,6 @@ export const STORAGE_KEY = "marnthara.input.v7.0.1";
 export const PDF_EXPORT_DELAY_MS = 500;
 export const SQM_TO_SQYD = 1.196;
 
-<<<<<<< HEAD
-// Add missing PRICING export
-=======
->>>>>>> cb8a02287ec00b14740ece1ee9dc00b3aa13a238
 export const PRICING = {
     DEFAULT_LABOR_RATE: 100,
     MIN_CHARGE: 500,
@@ -33,12 +26,6 @@ export const WALLPAPER_SPECS = {
 } as const;
 
 export const SELECTORS = {
-<<<<<<< HEAD
-    // ... (previous selectors remain unchanged)
-} as const;
-
-// Ensure all constants are immutable
-=======
     // App Container
     appContainer: '#app-container',
     roomsContainer: '#roomsContainer',
@@ -80,7 +67,6 @@ export const SELECTORS = {
     duplicateRoomBtn: '#duplicateRoomBtn'
 } as const;
 
->>>>>>> cb8a02287ec00b14740ece1ee9dc00b3aa13a238
 Object.freeze(PRICING);
 Object.freeze(WALLPAPER_SPECS);
 Object.freeze(SELECTORS);
