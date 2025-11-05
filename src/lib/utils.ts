@@ -136,3 +136,91 @@ export const bahttext = (v: any): string => {
 
     return bahtStr + satangStr;
 };
+
+/**
+ * handleCmToMBlur
+ * - Utility to convert centimeters input to meters on blur and write result to a target input.
+ * - Supports being called as an event handler (blur event) or directly with an input element.
+ *
+ * Usage examples:
+ * 1) As event handler: inputEl.addEventListener('blur', handleCmToMBlur);
+ *    - If a target is not provided, the function will try to find a sibling/nearby input to put the meters value.
+ * 2) Programmatically: handleCmToMBlur(inputEl, targetElOrSelector);
+ *
+ * Parameters:
+ *  - source: Event | HTMLInputElement
+ *  - target?: HTMLInputElement | string (CSS selector) - optional, element to receive meters string
+ */
+export const handleCmToMBlur = (
+    source: Event | HTMLInputElement,
+    target?: HTMLInputElement | string
+): void => {
+    let inputEl: HTMLInputElement | null = null;
+
+    // Determine source input element
+    if (source instanceof Event) {
+        const t = source.target as HTMLElement | null;
+        if (!t) return;
+        if ((t as HTMLInputElement).value !== undefined) inputEl = t as HTMLInputElement;
+        else {
+            // not an input event
+            return;
+        }
+    } else if (source instanceof HTMLInputElement) {
+        inputEl = source;
+    } else {
+        return;
+    }
+
+    // parse value (assume centimeters)
+    const cmVal = toNum(inputEl.value);
+    if (cmVal <= 0) {
+        // if target exists, clear it; otherwise do nothing
+        if (target) {
+            if (typeof target === 'string') {
+                const sel = document.querySelector<HTMLInputElement>(target);
+                if (sel) sel.value = '';
+            } else {
+                target.value = '';
+            }
+        } else {
+            // try clearing common sibling targets
+            const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input[type="text"].meters');
+            if (sibling) sibling.value = '';
+        }
+        return;
+    }
+
+    const meters = cmVal / 100;
+    const metersStr = meters.toFixed(2);
+
+    // write to provided target or try to find a sensible default
+    if (target) {
+        if (typeof target === 'string') {
+            const sel = document.querySelector<HTMLInputElement>(target);
+            if (sel) sel.value = metersStr;
+        } else {
+            target.value = metersStr;
+        }
+        return;
+    }
+
+    // No explicit target: try sensible fallbacks
+    // 1) data-target attribute on the source input (e.g. data-target="#lengthM")
+    const dataTarget = inputEl.getAttribute('data-target');
+    if (dataTarget) {
+        const sel = document.querySelector<HTMLInputElement>(dataTarget);
+        if (sel) {
+            sel.value = metersStr;
+            return;
+        }
+    }
+
+    // 2) sibling inputs with data-unit="m" or class ".m" or ".meters"
+    const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters') ||
+        inputEl.nextElementSibling as (HTMLInputElement | null);
+
+    if (sibling && (sibling.tagName.toLowerCase() === 'input')) {
+        try { sibling.value = metersStr; } catch (e) { /* ignore */ }
+    }
+};
