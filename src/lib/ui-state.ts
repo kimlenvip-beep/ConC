@@ -55,9 +55,6 @@ type RegisteredListener = {
 
 const roomDefaultsListeners: RegisteredListener[] = [];
 
-/**
- * Register a listener that can later be cleared by clearRoomDefaultsModalListeners()
- */
 export const registerRoomDefaultsListener = (
     el: EventTarget,
     type: string,
@@ -65,20 +62,12 @@ export const registerRoomDefaultsListener = (
     options?: boolean | AddEventListenerOptions
 ): void => {
     try {
-        if ((el as Element)?.addEventListener) {
-            (el as Element).addEventListener(type, handler as EventListener, options);
-        } else if ((el as Window)?.addEventListener) {
-            (el as Window).addEventListener(type, handler as EventListener, options);
-        }
-    } catch (e) {
-        // ignore (best-effort)
-    }
+        if ((el as Element)?.addEventListener) (el as Element).addEventListener(type, handler as EventListener, options);
+        else if ((el as Window)?.addEventListener) (el as Window).addEventListener(type, handler as EventListener, options);
+    } catch {}
     roomDefaultsListeners.push({ el, type, handler, options });
 };
 
-/**
- * Unregister a specific listener (optional)
- */
 export const unregisterRoomDefaultsListener = (
     el: EventTarget,
     type: string,
@@ -86,35 +75,21 @@ export const unregisterRoomDefaultsListener = (
     options?: boolean | EventListenerOptions
 ): void => {
     try {
-        if ((el as Element)?.removeEventListener) {
-            (el as Element).removeEventListener(type, handler as EventListener, options);
-        } else if ((el as Window)?.removeEventListener) {
-            (el as Window).removeEventListener(type, handler as EventListener, options);
-        }
-    } catch (e) { /* ignore */ }
-
+        if ((el as Element)?.removeEventListener) (el as Element).removeEventListener(type, handler as EventListener, options);
+        else if ((el as Window)?.removeEventListener) (el as Window).removeEventListener(type, handler as EventListener, options);
+    } catch {}
     for (let i = roomDefaultsListeners.length - 1; i >= 0; i--) {
         const r = roomDefaultsListeners[i];
-        if (r.el === el && r.type === type && r.handler === handler) {
-            roomDefaultsListeners.splice(i, 1);
-        }
+        if (r.el === el && r.type === type && r.handler === handler) roomDefaultsListeners.splice(i, 1);
     }
 };
 
-/**
- * Clear all listeners registered via registerRoomDefaultsListener()
- */
 export const clearRoomDefaultsModalListeners = (): void => {
     for (const { el, type, handler, options } of roomDefaultsListeners) {
         try {
-            if ((el as Element)?.removeEventListener) {
-                (el as Element).removeEventListener(type, handler as EventListener, options as EventListenerOptions);
-            } else if ((el as Window)?.removeEventListener) {
-                (el as Window).removeEventListener(type, handler as EventListener, options as EventListenerOptions);
-            }
-        } catch (e) {
-            // ignore per-listener removal errors
-        }
+            if ((el as Element)?.removeEventListener) (el as Element).removeEventListener(type, handler as EventListener, options as EventListenerOptions);
+            else if ((el as Window)?.removeEventListener) (el as Window).removeEventListener(type, handler as EventListener, options as EventListenerOptions);
+        } catch {}
     }
     roomDefaultsListeners.length = 0;
 };

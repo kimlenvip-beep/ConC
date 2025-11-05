@@ -1,5 +1,4 @@
 // src/lib/utils.ts
-
 export const toNum = (v: any): number => {
     if (v === null || v === undefined) return 0;
     if (typeof v === 'string') {
@@ -10,57 +9,35 @@ export const toNum = (v: any): number => {
     return Number.isFinite(num) ? num : 0;
 };
 
-export const fmt = (v: any): string => {
-    return toNum(v).toFixed(2);
-};
+export const fmt = (v: any): string => toNum(v).toFixed(2);
 
 export const fmtTH = (v: any): string => {
     const num = toNum(v);
     try {
-        return num.toLocaleString('th-TH', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-    } catch (error) {
+        return num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } catch {
         return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 };
 
-export const fmtDimension = (v: any): string => {
-    const num = toNum(v);
-    return num > 0 ? num.toFixed(2) : '';
-};
-
-export const debounce = <T extends (...args: any[]) => void>(
-    func: T,
-    delay: number
-): ((...args: Parameters<T>) => void) => {
-    let timeoutId: number | undefined;
-    return (...args: Parameters<T>): void => {
-        if (timeoutId !== undefined) clearTimeout(timeoutId);
-        timeoutId = window.setTimeout(() => {
-            func(...args);
-            timeoutId = undefined;
-        }, delay);
+export const debounce = <T extends (...args: any[]) => void>(func: T, delay = 300) => {
+    let id: number | undefined;
+    return (...args: Parameters<T>) => {
+        if (id !== undefined) clearTimeout(id);
+        id = window.setTimeout(() => func(...args), delay);
     };
 };
 
-export const throttle = <T extends (...args: any[]) => void>(
-    func: T,
-    limit: number
-): ((...args: Parameters<T>) => void) => {
-    let inThrottle = false;
-    let lastArgs: Parameters<T> | null = null;
-    return (...args: Parameters<T>): void => {
-        if (!inThrottle) {
-            func(...args);
-            inThrottle = true;
+export const throttle = <T extends (...args: any[]) => void>(fn: T, limit = 250) => {
+    let waiting = false;
+    let lastArgs: any[] | null = null;
+    return (...args: any[]) => {
+        if (!waiting) {
+            fn(...(args as Parameters<T>));
+            waiting = true;
             setTimeout(() => {
-                inThrottle = false;
-                if (lastArgs) {
-                    func(...lastArgs);
-                    lastArgs = null;
-                }
+                waiting = false;
+                if (lastArgs) { fn(...(lastArgs as Parameters<T>)); lastArgs = null; }
             }, limit);
         } else {
             lastArgs = args;
@@ -68,159 +45,98 @@ export const throttle = <T extends (...args: any[]) => void>(
     };
 };
 
-export const sanitizeHTML = (str: string | null | undefined): string => {
-    if (!str) return '';
-    const temp = document.createElement('div');
-    temp.textContent = str;
-    return temp.innerHTML;
+export const sanitizeHTML = (s: string | null | undefined): string => {
+    if (!s) return '';
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
 };
 
 export const sanitizeForFilename = (str: string): string => {
     if (!str) return 'file';
-    return str
-        .replace(/[^a-z0-9\u0E00-\u0E7F._-]/gi, '_')
-        .substring(0, 100)
-        .trim()
-        .replace(/^\.+|\.+$/g, '') // Remove leading/trailing dots
-        .replace(/_{2,}/g, '_'); // Replace multiple underscores with single
+    return str.replace(/[^a-z0-9\u0E00-\u0E7F._-]/gi, '_').substring(0, 100).trim().replace(/^\.+|\.+$/g, '').replace(/_{2,}/g, '_');
 };
 
-const TxtNumArr = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
-const TxtDigitArr = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
+const TxtNumArr = ["ศูนย์","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"];
+const TxtDigitArr = ["","สิบ","ร้อย","พัน","หมื่น","แสน","ล้าน"];
 
 export const bahttext = (v: any): string => {
-    let number = toNum(v);
-    if (number === 0) return "ศูนย์บาทถ้วน";
-    number = parseFloat(number.toFixed(2));
-    const integerPart = Math.floor(number);
-    const decimalPart = Math.round((number - integerPart) * 100);
-
-    const read = (n: number): string => {
-        if (n === 0) return '';
-        const s = String(n);
-        let str = '';
-        for (let i = 0; i < s.length; i++) {
-            const digit = s[i];
-            const position = s.length - i - 1;
+    let n = toNum(v);
+    if (n === 0) return "ศูนย์บาทถ้วน";
+    n = parseFloat(n.toFixed(2));
+    const i = Math.floor(n);
+    const d = Math.round((n - i) * 100);
+    const read = (num: number) => {
+        if (num === 0) return '';
+        const s = String(num);
+        let out = '';
+        for (let idx = 0; idx < s.length; idx++) {
+            const digit = s[idx];
+            const pos = s.length - idx - 1;
             if (digit === '0') continue;
-            if (position === 1 && digit === '1') {
-                str += TxtDigitArr[position];
-            } else if (position === 1 && digit === '2') {
-                str += "ยี่" + TxtDigitArr[position];
-            } else if (position === 0 && digit === '1' && s.length > 1) {
-                str += 'เอ็ด';
-            } else {
-                str += TxtNumArr[parseInt(digit)] + TxtDigitArr[position];
-            }
+            if (pos === 1 && digit === '1') out += TxtDigitArr[pos];
+            else if (pos === 1 && digit === '2') out += 'ยี่' + TxtDigitArr[pos];
+            else if (pos === 0 && digit === '1' && s.length > 1) out += 'เอ็ด';
+            else out += TxtNumArr[parseInt(digit)] + TxtDigitArr[pos];
         }
-        return str;
+        return out;
     };
-
-    let bahtStr = '';
-    if (integerPart > 0) {
-        const millions = Math.floor(integerPart / 1000000);
-        const remainder = integerPart % 1000000;
-        if (millions > 0) {
-            bahtStr += read(millions) + 'ล้าน';
-        }
-        bahtStr += read(remainder);
-        bahtStr += 'บาท';
+    let res = '';
+    if (i > 0) {
+        const millions = Math.floor(i / 1000000);
+        const rest = i % 1000000;
+        if (millions > 0) res += read(millions) + 'ล้าน';
+        res += read(rest) + 'บาท';
     }
-
-    let satangStr = '';
-    if (decimalPart > 0) {
-        satangStr = read(decimalPart) + 'สตางค์';
-    } else {
-        bahtStr += 'ถ้วน';
-    }
-
-    return bahtStr + satangStr;
+    if (d > 0) res += read(d) + 'สตางค์'; else res += 'ถ้วน';
+    return res;
 };
 
 /**
- * handleCmToMBlur
- * - Utility to convert centimeters input to meters on blur and write result to a target input.
- * - Supports being called as an event handler (blur event) or directly with an input element.
- *
- * Usage examples:
- * 1) As event handler: inputEl.addEventListener('blur', handleCmToMBlur);
- *    - If a target is not provided, the function will try to find a sibling/nearby input to put the meters value.
- * 2) Programmatically: handleCmToMBlur(inputEl, targetElOrSelector);
- *
- * Parameters:
- *  - source: Event | HTMLInputElement
- *  - target?: HTMLInputElement | string (CSS selector) - optional, element to receive meters string
+ * Convert centimeters input to meters on blur; writes to target input if provided.
  */
 export const handleCmToMBlur = (
     source: Event | HTMLInputElement,
     target?: HTMLInputElement | string
 ): void => {
     let inputEl: HTMLInputElement | null = null;
-
-    // Determine source input element
     if (source instanceof Event) {
         const t = source.target as HTMLElement | null;
         if (!t) return;
         if ((t as HTMLInputElement).value !== undefined) inputEl = t as HTMLInputElement;
-        else {
-            // not an input event
-            return;
-        }
-    } else if (source instanceof HTMLInputElement) {
-        inputEl = source;
-    } else {
-        return;
-    }
+        else return;
+    } else if (source instanceof HTMLInputElement) inputEl = source;
+    else return;
 
-    // parse value (assume centimeters)
-    const cmVal = toNum(inputEl.value);
-    if (cmVal <= 0) {
-        // if target exists, clear it; otherwise do nothing
+    const cm = toNum(inputEl.value);
+    if (cm <= 0) {
         if (target) {
             if (typeof target === 'string') {
-                const sel = document.querySelector<HTMLInputElement>(target);
-                if (sel) sel.value = '';
-            } else {
-                target.value = '';
-            }
+                const el = document.querySelector<HTMLInputElement>(target);
+                if (el) el.value = '';
+            } else target.value = '';
         } else {
-            // try clearing common sibling targets
-            const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input[type="text"].meters');
-            if (sibling) sibling.value = '';
+            const sib = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters');
+            if (sib) sib.value = '';
         }
         return;
     }
-
-    const meters = cmVal / 100;
-    const metersStr = meters.toFixed(2);
-
-    // write to provided target or try to find a sensible default
+    const m = (cm / 100).toFixed(2);
     if (target) {
         if (typeof target === 'string') {
-            const sel = document.querySelector<HTMLInputElement>(target);
-            if (sel) sel.value = metersStr;
-        } else {
-            target.value = metersStr;
-        }
-        return;
-    }
-
-    // No explicit target: try sensible fallbacks
-    // 1) data-target attribute on the source input (e.g. data-target="#lengthM")
-    const dataTarget = inputEl.getAttribute('data-target');
-    if (dataTarget) {
-        const sel = document.querySelector<HTMLInputElement>(dataTarget);
-        if (sel) {
-            sel.value = metersStr;
+            const el = document.querySelector<HTMLInputElement>(target);
+            if (el) el.value = m;
+        } else target.value = m;
+    } else {
+        const dataTarget = inputEl.getAttribute('data-target');
+        if (dataTarget) {
+            const el = document.querySelector<HTMLInputElement>(dataTarget);
+            if (el) el.value = m;
             return;
         }
-    }
-
-    // 2) sibling inputs with data-unit="m" or class ".m" or ".meters"
-    const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters') ||
-        inputEl.nextElementSibling as (HTMLInputElement | null);
-
-    if (sibling && (sibling.tagName.toLowerCase() === 'input')) {
-        try { sibling.value = metersStr; } catch (e) { /* ignore */ }
+        const sibling = inputEl.parentElement?.querySelector<HTMLInputElement>('input[data-unit="m"], input.m, input.meters') || inputEl.nextElementSibling as (HTMLInputElement | null);
+        if (sibling && sibling.tagName.toLowerCase() === 'input') {
+            sibling.value = m;
+        }
     }
 };

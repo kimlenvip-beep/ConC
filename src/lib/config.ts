@@ -13,7 +13,7 @@ export const SHOP_CONFIG = {
     phone: "+66-2-123-4567",
     email: "contact@example.com",
     taxId: "",
-    logoUrl: "", // ถ้าไม่มี ให้เป็น empty string
+    logoUrl: "",
     currency: "THB"
 } as const;
 
@@ -49,12 +49,9 @@ export const ITEM_CONFIG = {
 } as const;
 
 export const SELECTORS = {
-    // App Container
     appContainer: '#app-container',
     roomsContainer: '#roomsContainer',
     templates: '#templates',
-    
-    // Header & Menu
     menuToggleBtn: '#menuToggleBtn',
     mainSidebar: '#mainSidebar',
     menuCloseBtn: '#menuCloseBtn',
@@ -69,24 +66,16 @@ export const SELECTORS = {
     exportBtn: '#exportBtn',
     importFavBtn: '#importFavBtn',
     exportFavBtn: '#exportFavBtn',
-
-    // Room & Items
     room: '.room',
     roomsContainerInner: '#roomsContainer .rooms-inner',
     roomNameInput: '.room-name-input',
     itemCard: '.item-card',
     itemTotal: '.item-total',
-
-    // Favorites
     favManagerModal: '#favManagerModal',
     favAddModal: '#favAddModal',
     favAddCodeInput: '#favAddCodeInput',
     favAddPriceInput: '#favAddPriceInput',
-
-    // Price Inputs
     setPricePerMSelect: '.set-price-per-m-select',
-
-    // Controls
     duplicateRoomBtn: '#duplicateRoomBtn'
 } as const;
 
