@@ -1,12 +1,19 @@
 import type { ShopConfig, ItemConfig, PricingConfig } from '../types';
 
+/**
+ * app configuration and shared constants
+ */
+
 export const APP_VERSION = "vite-ts/7.0.1";
 export const WEBHOOK_URL = "https://your-make-webhook-url.com/your-unique-path";
 export const STORAGE_KEY = "marnthara.input.v7.0.1";
 export const PDF_EXPORT_DELAY_MS = 500;
 export const SQM_TO_SQYD = 1.196;
 
-// SHOP_CONFIG: ข้อมูลร้าน ใช้โดย documentGenerator และที่อื่น ๆ
+/**
+ * SHOP_CONFIG - used by document generator and other modules
+ * If you have a ShopConfig type in ../types you can update the object shape accordingly.
+ */
 export const SHOP_CONFIG = {
     name: "Marnthara",
     address: "123/45 Example Rd., Bangkok, Thailand",
@@ -17,7 +24,9 @@ export const SHOP_CONFIG = {
     currency: "THB"
 } as const;
 
-// PRICING: การตั้งค่าเริ่มต้นสำหรับการคำนวณราคา
+/**
+ * PRICING - default pricing settings used by calculations
+ */
 export const PRICING = {
     DEFAULT_LABOR_RATE: 100,
     MIN_CHARGE: 500,
@@ -30,7 +39,9 @@ export const PRICING = {
     ]
 } as const;
 
-// Wallpaper specs
+/**
+ * WALLPAPER_SPECS - wallpaper roll sizes / allowances
+ */
 export const WALLPAPER_SPECS = {
     roll_width_m: 0.53,
     roll_length_m: 10.0,
@@ -38,7 +49,9 @@ export const WALLPAPER_SPECS = {
     waste_allowance: 1.15
 } as const;
 
-// ITEM_CONFIG: ข้อมูลคอนฟิกของชนิดไอเทมที่หลายไฟล์เรียกใช้
+/**
+ * ITEM_CONFIG - metadata used by UI & rendering
+ */
 export const ITEM_CONFIG = {
     set: { name: 'ชุด', className: 'set-item', icon: 'ph-stack' },
     area: { name: 'พื้นที่', className: 'area-item', icon: 'ph-ruler' },
@@ -48,6 +61,9 @@ export const ITEM_CONFIG = {
     default: { name: 'ของตกแต่ง', className: 'default-item', icon: 'ph-ruler' }
 } as const;
 
+/**
+ * SELECTORS - central CSS selectors used by UI helpers
+ */
 export const SELECTORS = {
     appContainer: '#app-container',
     roomsContainer: '#roomsContainer',
@@ -79,6 +95,7 @@ export const SELECTORS = {
     duplicateRoomBtn: '#duplicateRoomBtn'
 } as const;
 
+/* Freeze objects to signal immutability at runtime */
 Object.freeze(SHOP_CONFIG);
 Object.freeze(PRICING);
 Object.freeze(WALLPAPER_SPECS);
