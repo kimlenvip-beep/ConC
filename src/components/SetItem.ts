@@ -1,10 +1,11 @@
-import { initUI } from './lib/ui';
-import { initUIActions } from './lib/ui-actions';
-import { initModals } from './lib/ui-modals';
+import { toNum } from '../lib/utils';
+import { CALC } from '../lib/calculations';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initUI();
-    initUIActions();
-    initModals();
-    console.info('App initialized');
-});
+export default function SetItem(props: any) {
+    const quantity = toNum(props?.quantity);
+    const price = CALC.calculateItemPrice(props);
+    return {
+        quantity,
+        price
+    };
+}

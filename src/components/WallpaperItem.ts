@@ -1,10 +1,10 @@
-import { initUI } from './lib/ui';
-import { initUIActions } from './lib/ui-actions';
-import { initModals } from './lib/ui-modals';
+import { CALC } from '../lib/calculations';
+import { fmt } from '../lib/utils';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initUI();
-    initUIActions();
-    initModals();
-    console.info('App initialized');
-});
+export default function WallpaperItem(props: any) {
+    const price = CALC.calculateItemPrice(props);
+    return {
+        price,
+        priceDisplay: fmt(price)
+    };
+}

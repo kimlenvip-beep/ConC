@@ -1,10 +1,11 @@
-import { initUI } from './lib/ui';
-import { initUIActions } from './lib/ui-actions';
-import { initModals } from './lib/ui-modals';
+import { fmt } from '../lib/utils';
+import { CALC } from '../lib/calculations';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initUI();
-    initUIActions();
-    initModals();
-    console.info('App initialized');
-});
+export default function RoomCard(room: any) {
+    const subtotal = (room?.items || []).reduce((s: number, it: any) => s + (Number(it.total) || 0), 0);
+    return {
+        title: room?.name || 'Room',
+        subtotalDisplay: fmt(subtotal),
+        subtotal
+    };
+}
