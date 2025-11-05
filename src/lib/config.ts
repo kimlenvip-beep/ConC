@@ -6,6 +6,18 @@ export const STORAGE_KEY = "marnthara.input.v7.0.1";
 export const PDF_EXPORT_DELAY_MS = 500;
 export const SQM_TO_SQYD = 1.196;
 
+// SHOP_CONFIG: ข้อมูลร้าน ใช้โดย documentGenerator และที่อื่น ๆ
+export const SHOP_CONFIG = {
+    name: "Marnthara",
+    address: "123/45 Example Rd., Bangkok, Thailand",
+    phone: "+66-2-123-4567",
+    email: "contact@example.com",
+    taxId: "",
+    logoUrl: "", // ถ้าไม่มี ให้เป็น empty string
+    currency: "THB"
+} as const;
+
+// PRICING: การตั้งค่าเริ่มต้นสำหรับการคำนวณราคา
 export const PRICING = {
     DEFAULT_LABOR_RATE: 100,
     MIN_CHARGE: 500,
@@ -18,11 +30,22 @@ export const PRICING = {
     ]
 } as const;
 
+// Wallpaper specs
 export const WALLPAPER_SPECS = {
     roll_width_m: 0.53,
     roll_length_m: 10.0,
     roll_sqm: 5.0,
     waste_allowance: 1.15
+} as const;
+
+// ITEM_CONFIG: ข้อมูลคอนฟิกของชนิดไอเทมที่หลายไฟล์เรียกใช้
+export const ITEM_CONFIG = {
+    set: { name: 'ชุด', className: 'set-item', icon: 'ph-stack' },
+    area: { name: 'พื้นที่', className: 'area-item', icon: 'ph-ruler' },
+    wallpaper: { name: 'วอลล์เปเปอร์', className: 'wallpaper-item', icon: 'ph-frame' },
+    fabric: { name: 'ผ้า', className: 'fabric-item', icon: 'ph-fabric' },
+    sheer: { name: 'ผ้าม่านโปร่ง', className: 'sheer-item', icon: 'ph-sun' },
+    default: { name: 'ของตกแต่ง', className: 'default-item', icon: 'ph-ruler' }
 } as const;
 
 export const SELECTORS = {
@@ -67,6 +90,8 @@ export const SELECTORS = {
     duplicateRoomBtn: '#duplicateRoomBtn'
 } as const;
 
+Object.freeze(SHOP_CONFIG);
 Object.freeze(PRICING);
 Object.freeze(WALLPAPER_SPECS);
+Object.freeze(ITEM_CONFIG);
 Object.freeze(SELECTORS);
